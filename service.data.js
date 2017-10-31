@@ -1,45 +1,25 @@
 app.service('DataService', ['$rootScope', function($rootScope) {
-    const columnNames = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "BB", "CC", "DD", "EE", "FF", "GG", "HH", "II", "JJ", "KK", "LL", "MM", "NN", "OO", "PP", "QQ", "RR", "SS", "TT", "UU", "VV", "WW", "XX", "YY", "ZZ"];
-    const sheetId = '1Y9xK4Dr02jSW_b_7pT6Cc25_qSwS2I6eeafECd2lu7k';
-    const updateVal = (100 / 15) + 0.1;
-    const boxWidth = 31;
-    const gridWidth = 1;
+    const sheetId = '1fwzq_64mPMmCndomAe7sZeBrhJEhR9S-CJvIitzVrDI';
+    const updateVal = (100 / 10) + 0.1;
+    const boxWidth = 16;
+    const gridWidth = 0;
     var progress = 0;
 
     var characters = null;
     var enemies = null;
     var rows = [];
     var cols = [];
-    var map, characterData, enemyData, classIndex, itemIndex, skillIndex, coordMapping, terrainIndex, terrainLocs;
+    var map, characterData, classIndex, itemIndex, skillIndex, coordMapping, terrainIndex, terrainLocs;
 
-    this.getCharacters = function() {
-        return characters;
-    };
-    this.getEnemies = function() {
-        return enemies;
-    };
-    this.getMap = function() {
-        return map;
-    };
-    this.getRows = function() {
-        return rows;
-    };
-    this.getColumns = function() {
-        return cols;
-    };
-    this.getTerrainTypes = function() {
-        return terrainIndex;
-    };
-    this.getTerrainMappings = function() {
-        return terrainLocs;
-    };
+    this.getCharacters = function() { return characters; };
+    this.getMap = function() { return map; };
+    this.getRows = function() { return rows; };
+    this.getColumns = function() { return cols; };
+    this.getTerrainTypes = function() { return terrainIndex; };
+    this.getTerrainMappings = function() { return terrainLocs; };
 
-    this.loadMapData = function() {
-        fetchCharacterData();
-    };
-    this.calculateRanges = function() {
-        getMapDimensions();
-    };
+    this.loadMapData = function() { fetchCharacterData(); };
+    this.calculateRanges = function() { getMapDimensions(); };
 
     //\\//\\//\\//\\//\\//
     // DATA AJAX CALLS  //
@@ -49,68 +29,19 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "COLUMNS",
-            range: 'Stats!B2:AZ',
+            range: 'Unit Tracker!B1:AZ',
         }).then(function(response) {
             characterData = response.result.values;
             updateProgressBar();
-            fetchCharacterImages();
-        });
-    };
-
-    function fetchCharacterImages() {
-        gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: sheetId,
-            majorDimension: "ROWS",
-            valueRenderOption: "FORMULA",
-            // Obtain all images from all columns at row 5
-            range: 'Stats!B5:AZ5',
-        }).then(function(response) {
-            var images = response.result.values[0];
-
-            for (var i = 0; i < images.length && i < characterData.length; i++) {
-                characterData[i].splice(3, 1, processImageURL(images[i])); //replace the element at index 4
-            }
-
-            updateProgressBar();
-            fetchEnemyData();
-        });
-    }
-
-    function fetchEnemyData() {
-        gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: sheetId,
-            majorDimension: "COLUMNS",
-            range: 'Enemy Stats!B1:BZ',
-        }).then(function(response) {
-            enemyData = response.result.values;
-            updateProgressBar();
-            fetchEnemyImages();
-        });
-    };
-
-    function fetchEnemyImages() {
-        gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: sheetId,
-            majorDimension: "ROWS",
-            valueRenderOption: "FORMULA",
-            range: 'Enemy Stats!B4:AZ4',
-        }).then(function(response) {
-            var images = response.result.values[0];
-
-            for (var i = 0; i < images.length && i < enemyData.length; i++) {
-                enemyData[i].splice(3, 1, processImageURL(images[i])); //replace the element at index 3
-            }
-
-            updateProgressBar();
             fetchClassIndex();
         });
-    }
+    };
 
     function fetchClassIndex() {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Class Info!A2:AZ',
+            range: 'Classes!B2:AZ',
         }).then(function(response) {
             var results = response.result.values;
             classIndex = {};
@@ -121,15 +52,9 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
                 classIndex[c[0]] = {
                     'name': c[0],
-                    'terrainType' : c[42],
-                    'StrPair': parseInt(c[44]) | 0,
-                    'MagPair': parseInt(c[45]) | 0,
-                    'SklPair': parseInt(c[46]) | 0,
-                    'SpdPair': parseInt(c[47]) | 0,
-                    'LckPair': parseInt(c[48]) | 0,
-                    'DefPair': parseInt(c[49]) | 0,
-                    'ResPair': parseInt(c[50]) | 0,
-                    'MovPair': parseInt(c[51]) | 0
+                    'weaknesses' : c[3] != "-" ? c[3].replace(/^\s*|\s*$/g,'').split(/\s*,\s*/) : [],
+                    'desc' : c[39],
+                    'terrainType' : c[40] != undefined ? c[40] : ""
                 }
             }
 
@@ -142,7 +67,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Item List!B2:AO',
+            range: 'Item Index!B2:y',
         }).then(function(response) {
             var results = response.result.values;
 
@@ -154,37 +79,25 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 if (itm[0].length > 0) { //if the item has a name
                     itemIndex[itm[0]] = {
                         'name': itm[0],
-                        'type': itm[1],
-                        'atkStat': itm[2],
-                        'rank': itm[3],
+                        'class': itm[1],
+                        'rank' : itm[2],
+                        'atkStat': itm[3],
                         'might': parseInt(itm[4]) | 0,
                         'hit': parseInt(itm[5]) | 0,
                         'crit': parseInt(itm[6]) | 0,
-                        'crit%': parseFloat(itm[7]) | 0.0,
-                        'critDmg': parseInt(itm[8]) | 0,
-                        'avo': parseInt(itm[9]) | 0,
-                        'cEva': parseInt(itm[10]) | 0,
-                        'range': itm[11],
-                        'effect': itm[12],
-                        'effective': itm[13],
-                        'StrEqpt': parseInt(itm[14]) | 0,
-                        'MagEqpt': parseInt(itm[15]) | 0,
-                        'SklEqpt': parseInt(itm[16]) | 0,
-                        'SpdEqpt': parseInt(itm[17]) | 0,
-                        'LckEqpt': parseInt(itm[18]) | 0,
+                        'guard' : parseInt(itm[7]) | 0,
+                        'avo': parseInt(itm[8]) | 0,
+                        'cEva': parseInt(itm[9]) | 0,
+                        'range': itm[12],
+                        'effect': itm[13],
+                        'desc' : itm[14],
+                        'StrEqpt': parseInt(itm[15]) | 0,
+                        'MagEqpt': parseInt(itm[16]) | 0,
+                        'SklEqpt': parseInt(itm[17]) | 0,
+                        'SpdEqpt': parseInt(itm[18]) | 0,
                         'DefEqpt': parseInt(itm[19]) | 0,
                         'ResEqpt': parseInt(itm[20]) | 0,
-                        'MovEqpt': 0,
-                        'StrInv': parseInt(itm[30]) | 0,
-                        'MagInv': parseInt(itm[31]) | 0,
-                        'SklInv': parseInt(itm[32]) | 0,
-                        'SpdInv': parseInt(itm[33]) | 0,
-                        'LckInv': parseInt(itm[34]) | 0,
-                        'DefInv': parseInt(itm[35]) | 0,
-                        'ResInv': parseInt(itm[36]) | 0,
-                        'MovInv': parseInt(itm[37]) | 0,
-                        'desc': itm[38] != undefined ? itm[38] : "",
-                        'spriteUrl': itm[39] != undefined ? itm[39] : "",
+                        'spriteUrl': itm[23] != undefined ? itm[23] : "",
                     }
                 }
             }
@@ -198,35 +111,24 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Skill List!B2:C',
+            range: 'Skills!A2:E',
         }).then(function(response) {
             var skills = response.result.values;
+            skillIndex = {};
+            for (var i = 0; i < skills.length; i++) {
+                var s = skills[i];
+                if (s.length == 0 || s[0].length == 0) continue;
 
-            gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: sheetId,
-                majorDimension: "COLUMNS",
-                valueRenderOption: "FORMULA",
-                range: 'Skill List!A2:A',
-            }).then(function(response) {
-                var images = response.result.values[0];
-
-                skillIndex = {};
-                for (var i = 0; i < skills.length; i++) {
-                    var s = skills[i];
-                    if (s.length == 0) continue;
-
-                    if (s[0].length > 0) { //if the item has a name
-                        skillIndex[s[0]] = {
-                            'name': s[0],
-                            'desc': s[1],
-                            'spriteUrl': images[i] != undefined ? processImageURL(images[i]) : ""
-                        }
-                    }
+                skillIndex[s[0]] = {
+                    'name': s[0],
+                    'category' : s[1],
+                    'isCommand' : s[3].trim() == "Command",
+                    'desc': s[4]
                 }
+            }
 
                 updateProgressBar();
                 fetchTerrainIndex();
-            });
         });
     };
 
@@ -234,7 +136,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Terrain List!A2:K',
+            range: 'Terrain Chart!A2:K',
         }).then(function(response) {
             var rows = response.result.values;
             terrainIndex = {};
@@ -246,14 +148,15 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 terrainIndex[r[0]] = {
                     'avo': parseInt(r[1]) | 0,
                     'def': parseInt(r[2]) | 0,
-                    'heal': r[3],
+                    'heal': parseInt(r[3]) | 0,
                     'Foot': r[4],
-                    'Beast': r[5],
-                    'Mage': r[6],
-                    'Mount (T1)': r[7],
-                    'Mount (T2)': r[8],
-                    'Flier': r[9],
-                    'note': r[10]
+                    'Armor': r[5],
+                    'Mounted': r[6],
+                    'Monster' : r[7],
+                    'Mage' : r[8],
+                    'Flier' : r[9],
+                    'effect' : r[10] != "No effect." ? r[10] : "",
+                    'desc': r[11] != "No notes." ? r[11] : ""
                 }
             }
 
@@ -266,7 +169,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Terrain Coordinates!A1:ZZ',
+            range: 'Terrain Locations!A1:ZZ',
         }).then(function(response) {
             coordMapping = response.result.values;
 
@@ -284,79 +187,61 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
             var currObj = {
                 'name': c[0],
-                'class': getClass(c[1]),
-                'unitType': c[2],
-                'spriteUrl': c[3],
-                'level': c[4],
-                'exp': c[5],
-                'gold': parseInt(c[6].substring(0, c[6].indexOf("|")).trim()) | 0,
-                'ore': parseInt(c[6].substring(c[6].indexOf("|") + 1).trim()) | 0,
-                'position': c[7],
-                'currHp': parseInt(c[9]) | 0,
-                'maxHp': parseInt(c[10]) | 0,
-                'StrPair': parseInt(c[11]) | 0,
-                'MagPair': parseInt(c[12]) | 0,
-                'SklPair': parseInt(c[13]) | 0,
-                'SpdPair': parseInt(c[14]) | 0,
-                'LckPair': parseInt(c[15]) | 0,
-                'DefPair': parseInt(c[16]) | 0,
-                'ResPair': parseInt(c[17]) | 0,
-                'MovPair': parseInt(c[18]) | 0,
-                'weaknesses': c[28].length > 0 && c[28] != "-" ? c[28].split(",") : [],
-                'atk': parseInt(c[29]) | 0,
-                'hit': parseInt(c[30]) | 0,
-                'crit': parseInt(c[31]) | 0,
-                'avo': parseInt(c[32]) | 0,
-                'cEva': parseInt(c[33]) | 0,
-                'inventory': {},
-                'partner': c[42],
-                'stance': c[43],
-                'shields': c[44],
-                'skills': {},
-                'hpBuff': parseInt(c[54]) | 0,
-                'StrBuff': parseInt(c[55]) | 0,
-                'MagBuff': parseInt(c[56]) | 0,
-                'SklBuff': parseInt(c[57]) | 0,
-                'SpdBuff': parseInt(c[58]) | 0,
-                'LckBuff': parseInt(c[59]) | 0,
-                'DefBuff': parseInt(c[60]) | 0,
-                'ResBuff': parseInt(c[61]) | 0,
-                'MovBuff': parseInt(c[62]) | 0,
-                'atkBuff': parseInt(c[63]) | 0,
-                'hitBuff': parseInt(c[64]) | 0,
-                'critBuff': parseInt(c[65]) | 0,
-                'avoBuff': parseInt(c[66]) | 0,
-                'cEvaBuff': parseInt(c[67]) | 0,
-                'weaponRanks': {
-                    'w1': {
-                        'class': c[83],
-                        'rank': c[84],
-                        'exp': calcExpPercent(c[85])
+                'spriteUrl' : c[1],
+                //'class': getClass(c[2]),
+                //'motif' : getMotif(c[3]),
+                'affiliation' : c[4],
+                'position' : c[5],
+                'hasMoved' : c[6] == "1",
+                'currHp' : c[7],
+                'maxHp' : c[8],
+                'Str' : parseInt(c[9]),
+                'Mag' : parseInt(c[10]),
+                'Skl' : parseInt(c[11]),
+                'Spd' : parseInt(c[12]),
+                'Def' : parseInt(c[13]),
+                'Res' : parseInt(c[14]),
+                'Mov' : parseInt(c[15]),
+                'exp' : parseInt(c[16]) % 100,
+                'level' : Math.floor(parseInt(c[16])/100),
+                'money' : c[17],
+                'tags' : c[18],
+                'inventory' : {},
+                //'familiar' : getFamiliar(c[25]),
+                'skills' : {},
+                'statuses' : {},
+                'HpBuff' : c[38].length > 0 ? parseInt(c[38]) : 0,
+                'StrBuff' : c[39].length > 0 ? parseInt(c[39]) : 0,
+                'MagBuff' : c[40].length > 0 ? parseInt(c[40]) : 0,
+                'SklBuff' : c[41].length > 0 ? parseInt(c[41]) : 0,
+                'SpdBuff' : c[42].length > 0 ? parseInt(c[42]) : 0,
+                'DefBuff' : c[43].length > 0 ? parseInt(c[43]) : 0,
+                'ResBuff' : c[44].length > 0 ? parseInt(c[44]) : 0,
+                'MovBuff' : c[45].length > 0 ? parseInt(c[45]) : 0,
+                'HpBoost' : c[46].length > 0 ? parseInt(c[46]) : 0,
+                'StrBoost' : c[47].length > 0 ? parseInt(c[47]) : 0,
+                'MagBoost' : c[48].length > 0 ? parseInt(c[48]) : 0,
+                'SklBoost' : c[49].length > 0 ? parseInt(c[49]) : 0,
+                'SpdBoost' : c[50].length > 0 ? parseInt(c[50]) : 0,
+                'DefBoost' : c[51].length > 0 ? parseInt(c[51]) : 0,
+                'ResBoost' : c[52].length > 0 ? parseInt(c[52]) : 0,
+                'MovBoost' : c[53].length > 0 ? parseInt(c[53]) : 0,
+                'weaponRanks' : {
+                    'wpn1' : {
+                        'class' : c[54],
+                        'exp' : c[55]
                     },
-                    'w2': {
-                        'class': c[86],
-                        'rank': c[87],
-                        'exp': calcExpPercent(c[88])
-                    },
-                    'w3': {
-                        'class': c[89],
-                        'rank': c[90],
-                        'exp': calcExpPercent(c[91])
+                    'wpn2' : {
+                        'class' : c[56],
+                        'exp' : c[57]
                     }
                 },
+                'mimic' : c[58] != "None" ? c[58] : "",
+                'behavior' : c[59] != undefined ? c[59] : "",
+                'desc' : c[60] != undefined ? c[60] : "",
             };
 
-            //Set Base values
-            currObj.StrBase = (parseInt(c[20]) | 0) - currObj.StrBuff;
-            currObj.MagBase = (parseInt(c[21]) | 0) - currObj.MagBuff;
-            currObj.SklBase = (parseInt(c[22]) | 0) - currObj.SklBuff;
-            currObj.SpdBase = (parseInt(c[23]) | 0) - currObj.SpdBuff;
-            currObj.LckBase = (parseInt(c[24]) | 0) - currObj.LuckBuff;
-            currObj.DefBase = (parseInt(c[25]) | 0) - currObj.DefBuff;
-            currObj.ResBase = (parseInt(c[26]) | 0) - currObj.ResBuff;
-            currObj.MovBase = (parseInt(c[27]) | 0) - currObj.MovBuff;
-
-            //Find and append weapons
+            /*//Find and append weapons
             var itemArray = c.slice(36, 41);
             var eqptIndex = itemArray.indexOf(c[35]);
             if (eqptIndex != -1) { //if there is an equipped item, move it to the head of the list
@@ -368,103 +253,9 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 currObj.inventory["itm" + j] = getItem(itemArray[j]);
 
             for (var k = 47; k <= 52; k++)
-                currObj.skills["skl" + (k - 46)] = getSkill(c[k]);
+                currObj.skills["skl" + (k - 46)] = getSkill(c[k]);*/
 
             characters["char_" + i] = currObj;
-        }
-
-        updateProgressBar();
-        processEnemies();
-    };
-
-    function processEnemies() {
-        enemies = {};
-
-        for (var i = 0; i < enemyData.length; i++) {
-            var e = enemyData[i];
-            if (e[0].length == 0) continue;
-
-            var currObj = {
-                'name': e[0],
-                'class': getClass(e[1]),
-                'unitType': e[2],
-                'spriteUrl': e[3],
-                'currHp': parseInt(e[5]) | 0,
-                'maxHp': parseInt(e[6]) | 0,
-                'StrPair': parseInt(e[7]) | 0,
-                'MagPair': parseInt(e[8]) | 0,
-                'SklPair': parseInt(e[9]) | 0,
-                'SpdPair': parseInt(e[10]) | 0,
-                'LckPair': parseInt(e[11]) | 0,
-                'DefPair': parseInt(e[12]) | 0,
-                'ResPair': parseInt(e[13]) | 0,
-                'MovPair': parseInt(e[14]) | 0,
-                'StrBase': parseInt(e[16]) | 0,
-                'MagBase': parseInt(e[17]) | 0,
-                'SklBase': parseInt(e[18]) | 0,
-                'SpdBase': parseInt(e[19]) | 0,
-                'LckBase': parseInt(e[20]) | 0,
-                'DefBase': parseInt(e[21]) | 0,
-                'ResBase': parseInt(e[22]) | 0,
-                'MovBase': parseInt(e[23]) | 0,
-                'level': e[24],
-                'position': e[25],
-                'atk': parseInt(e[26]) | 0,
-                'hit': parseInt(e[27]) | 0,
-                'crit': parseInt(e[28]) | 0,
-                'avo': parseInt(e[29]) | 0,
-                'cEva': parseInt(e[30]) | 0,
-                'weaknesses': e[35].length > 0 && e[35] != "-" ? e[35].split(",") : [],
-                'inventory': {},
-                'weaponRanks': {
-                    'w1': {
-                        'class': e[40],
-                        'rank': e[42],
-                    },
-                    'w2': {
-                        'class': e[86],
-                        'rank': e[87],
-                    },
-                    'w3': {
-                        'class': e[89],
-                        'rank': e[90],
-                    }
-                },
-                'skills': {},
-                'partner': e[55],
-                'stance': e[56],
-                'shields': parseInt(e[57]) | 0,
-                'hpBuff': parseInt(e[59]) | 0,
-                'StrBuff': parseInt(e[60]) | 0,
-                'MagBuff': parseInt(e[61]) | 0,
-                'SklBuff': parseInt(e[62]) | 0,
-                'SpdBuff': parseInt(e[63]) | 0,
-                'LckBuff': parseInt(e[64]) | 0,
-                'DefBuff': parseInt(e[65]) | 0,
-                'ResBuff': parseInt(e[66]) | 0,
-                'MovBuff': parseInt(e[67]) | 0,
-                'atkBuff': parseInt(e[68]) | 0,
-                'hitBuff': parseInt(e[69]) | 0,
-                'critBuff': parseInt(e[70]) | 0,
-                'avoBuff': parseInt(e[71]) | 0,
-                'cEvaBuff': parseInt(e[72]) | 0,
-            };
-
-            //Find and append weapons
-            var itemArray = e.slice(34, 39);
-            var eqptIndex = itemArray.indexOf(e[33]);
-            if (eqptIndex != -1) { //if there is an equipped item, move it to the head of the list
-                itemArray.splice(eqptIndex, 1);
-                itemArray.splice(0, 0, e[33]);
-            }
-
-            for (var j = 0; j < itemArray.length; j++)
-                currObj.inventory["itm" + j] = getItem(itemArray[j]);
-
-            for (var k = 46; k < 51; k++)
-                currObj.skills["skl" + (k - 45)] = getSkill(e[k]);
-
-            enemies["enmy_" + i] = currObj;
         }
 
         updateProgressBar();
@@ -476,11 +267,9 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             spreadsheetId: sheetId,
             majorDimension: "COLUMNS",
             valueRenderOption: "FORMULA",
-            range: 'Current Map!A6:A6',
+            range: 'Map Data!A2:A2',
         }).then(function(response) {
-            var formula = response.result.values[0][0];
-            map = processImageURL(formula);
-
+            map = response.result.values[0][0];
             updateProgressBar();
         });
     };
@@ -493,13 +282,14 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         var map = document.getElementById('mapImg');
 
         var height = map.naturalHeight; //calculate the height of the map
-        height = (height / (boxWidth + gridWidth)) - 2;
+        height = (height / (boxWidth + gridWidth));
         for (var i = 0; i < height; i++)
             rows.push((i+1)+"");
 
         var width = map.naturalWidth; //calculate the width of the map
-        width = (width / (boxWidth + gridWidth)) - 2;
-        cols = columnNames.slice(0, width);
+        width = (width / (boxWidth + gridWidth));
+        for (var i = 0; i < width; i++)
+            cols.push((i+1)+"");
 
         updateProgressBar();
         initializeTerrain();
@@ -510,26 +300,22 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
         for (var r = 0; r < rows.length; r++)
             for (var c = 0; c < cols.length; c++)
-                terrainLocs[cols[c] + rows[r]] = getDefaultTerrainObj();
+                terrainLocs[cols[c] + "," + rows[r]] = getDefaultTerrainObj();
 
         //Update terrain types from input list
         for (var r = 0; r < coordMapping.length; r++) {
             var row = coordMapping[r];
             for (var c = 0; c < cols.length && c < row.length; c++) {
-                if (row[c].length > 0) terrainLocs[cols[c] + rows[r]].type = row[c];
+                if (row[c].length > 0) terrainLocs[cols[c] + "," + rows[r]].type = row[c];
             }
         }
 
         for (var c in characters)
-            if (terrainLocs[characters[c].position] != undefined && characters[c].stance != "Backpack")
-                terrainLocs[characters[c].position].occupiedAffiliation = "char";
-
-        for (var e in enemies)
-            if (terrainLocs[enemies[e].position] != undefined && enemies[e].stance != "Backpack")
-                terrainLocs[enemies[e].position].occupiedAffiliation = "enemy";
+            if (terrainLocs[characters[c].position] != undefined)
+                terrainLocs[characters[c].position].occupiedAffiliation = characters[c].affiliation;
 
         updateProgressBar();
-        runRangeCalculations();
+        //runRangeCalculations();
     };
 
     function getDefaultTerrainObj() {

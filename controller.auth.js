@@ -1,6 +1,6 @@
 app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', function($scope, $location, $interval, DataService) {
     var id = fetch();
-    var sheetId = '1Y9xK4Dr02jSW_b_7pT6Cc25_qSwS2I6eeafECd2lu7k';
+    var sheetId = '1fwzq_64mPMmCndomAe7sZeBrhJEhR9S-CJvIitzVrDI';
     $scope.ready = false;
     var checkGapi = $interval(checkAuth, 250);
     $scope.loadingIcon = pickLoadingIcon();
@@ -53,7 +53,7 @@ app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', f
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "COLUMNS",
-            range: 'Current Map!A1:A1',
+            range: 'Map Data!A1:A1',
         }).then(function(response) {
             var toggle = response.result.values[0][0];
             if (toggle == "Off") {
