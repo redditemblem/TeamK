@@ -1,0 +1,179 @@
+.convoyButton{
+    display: inline-block;
+    cursor: pointer;
+    width: 75px;
+	height: 25px;
+ 	border-radius: 5px;
+ 	border: 0px;
+ 	box-shadow: none;
+ 	background-color: #003051;
+ 	color: white;
+}
+
+.convoyButton:hover{
+    background-color: #0063a7;
+};
+
+.convoyLoadingButton{
+    position: absolute;
+    top: 2px;
+    left: 11px;
+    width: 70%;
+    filter: invert(100%);
+}
+
+.convoyFrame{
+    position: fixed; 
+    z-index: 99;
+    top: calc(50% - 250px);
+    left: calc(50% - 500px);
+    height: 500px;
+    width: 950px;
+    margin:0 auto;
+    background-color: #DAAC5E;
+    box-shadow: 1px 1px 30px black;
+    font-family: "Verdana";
+    padding: 15px;
+}
+
+.convoyTableContainer{
+    height: 390px;
+    overflow-y: scroll;
+    display: block;
+}
+
+table{
+    border-collapse: collapse;
+    text-align: left;
+    table-layout: fixed;
+}
+
+.header{
+    position: relative;
+    font-size: 12px;
+    font-weight: bold;
+    width: calc(100% - 17px);
+    color: white;
+    background-color: #490200;
+    top: 5px;
+    height: 25px;
+}
+
+.inventory{
+    font-size: 10px;
+    width: 100%;
+    background-color: white;
+}
+
+.inventoryRow{
+    height: 30px;
+    border-bottom: 1px solid black;
+}
+
+.inventoryRow:hover{
+    background-color: #efefef;
+    cursor: pointer;
+}
+
+.itemStats{
+    height: 20px;
+    color: white;
+    background-color: #474747;
+}
+
+.sortGrouping{
+    margin-top: 15px;
+    margin-left: 40px;
+    display: inline-block;
+    height: 50px;
+    width: 460px;
+}
+
+.sortHeader{
+    height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.showChkbx{
+    display: inline-block;
+    height: 20px;
+    width: 80px;
+    font-size: 12px;
+}
+
+.checkbox{
+    vertical-align: middle;
+    display: inline-block;
+    height: 12px;
+    width: 12px;
+    border: 2px solid #474747;
+    background-color: #EDE7DF;
+    border-radius: 5px;
+}
+
+.checkbox:hover{
+    cursor: pointer;
+}
+
+.check{
+    position: relative;
+    font-size: 18px;
+    font-weight: bold;
+    color: green;
+    right: 1px;
+    bottom: 6px;
+}
+
+.checkboxLabel{
+    vertical-align: middle;
+    margin-left: 3px;
+    font-size: 12px;
+}
+
+.showAllButton{
+    border-radius: 5px;
+ 	border: 0px;
+ 	box-shadow: none;
+ 	background-color: #BA7228;
+ 	color: white;
+}
+
+.showAllButton:hover{
+    background-color: #965b1f;
+	cursor: pointer;
+}
+
+.sortButton{
+    width: 130px;
+    height: 20px;
+    border-radius: 5px;
+ 	border: 0px;
+ 	box-shadow: none;
+ 	background-color: #BA7228;
+ 	color: white;
+}
+
+.sortButton:hover{
+    background-color: #965b1f;
+	cursor: pointer;
+}
+
+.shopSortButton{
+    width: 75px;
+    height: 20px;
+    border-radius: 5px;
+ 	border: 0px;
+ 	box-shadow: none;
+ 	background-color: #BA7228;
+ 	color: white;
+}
+
+.shopSortButton:hover{
+    background-color: #965b1f;
+	cursor: pointer;
+}
+
+.red{
+    background-color: #216619;
+}

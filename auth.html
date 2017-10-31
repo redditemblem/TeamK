@@ -1,0 +1,39 @@
+<div class="authBackground">
+	<div style="position: absolute; right: 3px; top: 3px; color: white; font-size: 12px;">Web app courtesy of IronPegasus and Leo</div>
+	<div class="authBox authBoxBlurred"></div>
+	<div id="authorize-div" class="authBox">
+		<div class="authText">
+			<img src="IMG/logo.png">
+		</div>
+		<button class="authButton" ng-disabled="!ready" ng-click="loadAPI(event,1)" style="left: calc(50% - 50px); top: calc(50% + 65px);">
+			<span ng-show="!ready"><img src="IMG/loading.gif"></span>
+			<span ng-show="ready">Load Map</span>
+		</button>
+		<button class="authButton" ng-click="loadAPI(event,2)" style="left: calc(50% - 105px); top: calc(50% + 105px);">
+			<span ng-show="!ready"><img src="IMG/loading.gif"></span>
+			<span ng-show="ready">Convoy</span>
+		</button>
+		<button class="authButton" ng-click="loadAPI(event,3)" style="left: calc(50% + 5px); top: calc(50% + 105px);">
+			<span ng-show="!ready"><img src="IMG/loading.gif"></span>
+			<span ng-show="ready">Shop</span>
+		</button>
+	</div>
+	<div id="unavailable-div" class="authBox">
+		<div class="displayUnavailable">
+			Sorry, the map is currently down for maintenance. Please check back later!
+		</div>
+	</div>
+	<div id="loading-div" class="authBox">
+		<div class="displayLoading">
+			<img ng-src="{{loadingIcon}}"><br> Fetching map data...<br>
+			<progress id="progress" max="100"></progress>
+		</div>
+	</div>
+
+	<convoy ng-if="showConvoy"></convoy>
+	<shop ng-if="showShop"></shop>
+
+	<!--Preloaded map image-->
+	<img id="mapImg" ng-src="{{map}}" style="display: none;" />
+
+</div>
