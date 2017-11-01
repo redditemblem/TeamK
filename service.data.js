@@ -1,6 +1,6 @@
 app.service('DataService', ['$rootScope', function($rootScope) {
     const sheetId = '1fwzq_64mPMmCndomAe7sZeBrhJEhR9S-CJvIitzVrDI';
-    const updateVal = (100 / 10) + 0.1;
+    const updateVal = (100 / 13) + 0.1;
     const boxWidth = 16;
     const gridWidth = 0;
     var progress = 0;
@@ -9,7 +9,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     var enemies = null;
     var rows = [];
     var cols = [];
-    var map, characterData, classIndex, itemIndex, skillIndex, coordMapping, terrainIndex, terrainLocs;
+    var map, characterData, classIndex, itemIndex, skillIndex, motifIndex, familiarIndex, coordMapping, terrainIndex, terrainLocs;
 
     this.getCharacters = function() { return characters; };
     this.getMap = function() { return map; };
@@ -79,6 +79,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 if (itm[0].length > 0) { //if the item has a name
                     itemIndex[itm[0]] = {
                         'name': itm[0],
+                        'isFamiliar' : false,
                         'class': itm[1],
                         'rank' : itm[2],
                         'atkStat': itm[3],
@@ -124,6 +125,59 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                     'category' : s[1],
                     'isCommand' : s[3].trim() == "Command",
                     'desc': s[4]
+                }
+            }
+
+                updateProgressBar();
+                fetchMotifIndex();
+        });
+    };
+
+    function fetchMotifIndex() {
+        gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: sheetId,
+            majorDimension: "ROWS",
+            range: 'Motifs!A2:O',
+        }).then(function(response) {
+            var motifs = response.result.values;
+            motifIndex = {};
+
+            for (var i = 0; i < motifs.length; i++) {
+                var m = motifs[i];
+                if (m.length == 0 || m[0].length == 0) continue;
+
+                motifIndex[m[0]] = {
+                    'name': m[0],
+                    'weaknesses' : m[5] != "-" ? m[5].replace(/^\s*|\s*$/g,'').split(/\s*,\s*/) : [],
+                    'desc' : m[14] != undefined ? m[14] : ""
+                }
+            }
+
+                updateProgressBar();
+                fetchFamiliarIndex();
+        });
+    };
+
+    function fetchFamiliarIndex() {
+        gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: sheetId,
+            majorDimension: "ROWS",
+            range: 'Familiars!B2:G',
+        }).then(function(response) {
+            var familiars = response.result.values;
+            familiarIndex = {};
+
+            for (var i = 0; i < familiars.length; i++) {
+                var f = familiars[i];
+                if (f.length == 0 || f[0].length == 0) continue;
+
+                familiarIndex[f[0]] = {
+                    'name': f[0],
+                    'isFamiliar' : true,
+                    'isCommand' : f[2].trim() == "Command",
+                    'effect' : f[3],
+                    'desc' : f[4],
+                    'spriteUrl' : f[5]
                 }
             }
 
@@ -188,8 +242,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             var currObj = {
                 'name': c[0],
                 'spriteUrl' : c[1],
-                //'class': getClass(c[2]),
-                //'motif' : getMotif(c[3]),
+                'class': getClass(c[2]),
+                'motif' : getMotif(c[3]),
                 'affiliation' : c[4],
                 'position' : c[5],
                 'hasMoved' : c[6] == "1",
@@ -207,7 +261,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'money' : c[17],
                 'tags' : c[18],
                 'inventory' : {},
-                //'familiar' : getFamiliar(c[25]),
+                'familiar' : getFamiliar(c[25]),
                 'skills' : {},
                 'statuses' : {},
                 'HpBuff' : c[38].length > 0 ? parseInt(c[38]) : 0,
@@ -241,19 +295,32 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'desc' : c[60] != undefined ? c[60] : "",
             };
 
-            /*//Find and append weapons
-            var itemArray = c.slice(36, 41);
-            var eqptIndex = itemArray.indexOf(c[35]);
-            if (eqptIndex != -1) { //if there is an equipped item, move it to the head of the list
-                itemArray.splice(eqptIndex, 1);
-                itemArray.splice(0, 0, c[35] + " (E)");
+            //Inventory
+            currObj.equippedWeapon = getItem(c[19]);
+            for(var m = 20; m < 25; m++)
+                currObj.inventory["itm_" + (m-19)] = getItem(c[m]);
+
+            //Replace equipped item & familiar with ghost
+            var inv = c.slice(20, 25); //grab inventory items
+            var eqpIndex = inv.indexOf(currObj.equippedWeapon.name);
+            var famIndex = inv.indexOf(currObj.familiar.name);
+            if(currObj.equippedWeapon.name.length > 0 && eqpIndex > -1){
+                var key = "itm_" + (eqpIndex+1);
+                currObj.inventory[key] = getDefaultWeaponObj(currObj.equippedWeapon.name);
+                currObj.inventory[key].class = currObj.equippedWeapon.class;
+                currObj.inventory[key].icoOverride = currObj.equippedWeapon.icoOverride;
+                currObj.inventory[key].equipped = true;
+            }
+            if(currObj.familiar.name.length > 0 && famIndex > -1){
+                var key = "itm_" + (famIndex+1);
+                currObj.inventory[key] = getDefaultFamiliarObj(currObj.familiar.name);
+                currObj.inventory[key].spriteUrl = currObj.familiar.spriteUrl;
+                currObj.inventory[key].equipped = true;
             }
 
-            for (var j = 0; j < itemArray.length; j++)
-                currObj.inventory["itm" + j] = getItem(itemArray[j]);
-
-            for (var k = 47; k <= 52; k++)
-                currObj.skills["skl" + (k - 46)] = getSkill(c[k]);*/
+            //Skills
+            for (var k = 26; k < 33; k++)
+                currObj.skills["skl" + (k - 25)] = getSkill(c[k]);
 
             characters["char_" + i] = currObj;
         }
@@ -315,7 +382,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 terrainLocs[characters[c].position].occupiedAffiliation = characters[c].affiliation;
 
         updateProgressBar();
-        //runRangeCalculations();
+        calculateCharacterRanges();
     };
 
     function getDefaultTerrainObj() {
@@ -327,117 +394,95 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             'occupiedAffiliation': ''
         }
     };
+    function calculateCharacterRanges() {
+		for(var c in characters){
+			var char = characters[c];
+			var list = [];
+			var atkList = [];
+			var healList = [];
+		
+			var pos = char.position;
+			if (pos.length > 0 && pos.indexOf(",") != -1 && pos != "Not Deployed" && pos != "Defeated") {
+				var horz = cols.indexOf(pos.substring(0,pos.indexOf(",")));
+				var vert = rows.indexOf(pos.substring(pos.indexOf(",")+1));
+				var range = parseInt(char.Mov);
 
-    function runRangeCalculations(){
-        for (var c in characters) {
-            var char = characters[c];
+                //Calculate max ranges
+				var maxAtkRange = 0;
+				var maxHealRange = 0;
+				for (var i in char.inventory) {
+                    var item = char.inventory[i];
+                    if(item.isFamiliar) continue; //skip familiars
 
-            if(char.stance == "Backpack"){
-                var pos = "";
-                for(var i in characters)
-                    if(characters[i].name == char.partner)
-                        pos = characters[i].position;
-                char.position = pos;
-            }
+					var r = formatItemRange(item.range);
+					if (isAttackingItem(item.class) && r > maxAtkRange && r <= 10) maxAtkRange = r;
+					else if (!isAttackingItem(item.class) && r > maxHealRange && r <= 10) maxHealRange = r;
+				}
 
-            calculateCharacterRange(char, c);
-        }
-
-        for (var e in enemies) {
-            var enmy = enemies[e];
-
-            if(enmy.stance == "Backpack"){
-                var pos = "";
-                for(var i in enemies)
-                    if(enemies[i].name == enmy.partner)
-                        pos = enemies[i].position;
-                enmy.position = pos;
-            }
-
-            calculateCharacterRange(enmy, e);
-        }
-
-        //Finish load
-        updateProgressBar();
-    };
-
-    function calculateCharacterRange(char, index) {
-        var list = [];
-        var atkList = [];
-        var healList = [];
-
-        if (char.position.length > 0) {
-            var horz = cols.indexOf(char.position.match(/[a-zA-Z]+/g)[0]);
-            var vert = rows.indexOf(char.position.match(/[0-9]+/g)[0]);
-            var range = parseInt(char.MovPair);
-
-            var maxAtkRange = 0;
-            var maxHealRange = 0;
-            for (var i in char.inventory) {
-                var item = char.inventory[i];
-                var r = formatItemRange(item.range);
-                if (isAttackingItem(item.type, item.critDmg) && r > maxAtkRange && r <= 10) maxAtkRange = r;
-                else if (!isAttackingItem(item.type, item.critDmg) && r > maxHealRange && r <= 10) maxHealRange = r;
-            }
-
-            var hasPass = false;
-            var hasSeaLegs = false;
-            for(var s in char.skills){
-                var skl = char.skills[s];
-                switch(skl.name){
-                    case "Pass" : hasPass = true; break;
-                    case "Sea Legs" : hasSeaLegs = true; break;
+                if(char.equippedWeapon.name.length > 0){
+                    var eR = formatItemRange(char.equippedWeapon.range);
+                    if (isAttackingItem(char.equippedWeapon.class) && eR > maxAtkRange && r <= 10) maxAtkRange = eR;
+                    else if (!isAttackingItem(char.equippedWeapon.class) && eR > maxHealRange && r <= 10) maxHealRange = eR;
                 }
-            }
 
-            var params = {
-                'atkRange' : maxAtkRange,
-                'healRange' : maxHealRange,
-                'terrainClass' : char.class.terrainType,
-                'affiliation' : index.indexOf("char_") > -1 ? "char" : "enemy",
-                'hasPass' : hasPass,
-                'hasSeaLegs' : hasSeaLegs
-            };
+				/*for(var s in char.skills){
+					var skl = char.skills[s];
+					switch(skl.name){
+						case "Radiance" : if(maxHealRange > 0) maxHealRange += 1; break;
+					}
+				}*/
 
-            recurseRange(horz, vert, range, params, list, "_");
-            
-            list.forEach(function(e){
-                horz = cols.indexOf(e.match(/[a-zA-Z]+/g)[0]);
-                vert = rows.indexOf(e.match(/[0-9]+/g)[0]);
+				var params = {
+					'atkRange' : maxAtkRange,
+					'healRange' : maxHealRange,
+					'terrainClass' : char.class.terrainType,
+					'affiliation' : char.affiliation
+				};
 
-                recurseItemRange(horz, vert, params.atkRange, list, atkList, "_");
-                recurseItemRange(horz, vert, params.healRange, list, healList, "_");
-            });
+				recurseRange(horz, vert, range, params, list, "_");
+				
+				list.forEach(function(e){
+					horz = cols.indexOf(e.substring(0,e.indexOf(",")));
+					vert = rows.indexOf(e.substring(e.indexOf(",")+1));
 
-            char.range = list;
-            char.atkRange = atkList;
-            char.healRange = healList;
-        } else {
-            char.range = [];
-            char.atkRange = [];
-            char.healRange = [];
-        }
-    };
+					recurseItemRange(horz, vert, params.atkRange, list, atkList, "_");
+					recurseItemRange(horz, vert, params.healRange, list, healList, "_");
+				});
+
+				char.range = list;
+				char.atkRange = atkList;
+				char.healRange = healList;
+			} else {
+				char.range = [];
+				char.atkRange = [];
+				char.healRange = [];
+			}
+		}
+
+		//Final progress update
+		updateProgressBar();
+	};
 
     function recurseRange(horzPos, vertPos, range, params, list, trace){
 		//Don't calculate cost for starting tile
-		var coord = cols[horzPos]+rows[vertPos];
+		var coord = cols[horzPos]+","+rows[vertPos];
 		var tile = terrainLocs[coord];
 
 		//Mov mode calcs
 		if(trace.length > 1){
 			var classCost = terrainIndex[tile.type][params.terrainClass];
+			if(classCost == undefined) return;
 
+            classCost = parseFloat(classCost) || 99;
+            
             //Determine traversal cost
-            if(params.hasSeaLegs && (tile.type == "Sea" || tile.type == "Lake" || tile.type == "Big Puddle") && range >= 2) range -= 2;
-			else if( classCost == undefined
-			   || classCost == "-"
-			   || (tile.occupiedAffiliation.length > 0 && tile.occupiedAffiliation != params.affiliation && !params.hasPass)
-			   || (parseFloat(classCost) > range)
+			if(  classCost == 99
+			 || (tile.occupiedAffiliation.length > 0 && tile.occupiedAffiliation != params.affiliation)
+			 || (classCost > range)
 			){
 				return;
-            }
-			else range -= parseFloat(classCost);
+			}
+			else range -= classCost;
 		}
 
 		if(list.indexOf(coord) == -1) list.push(coord);
@@ -446,22 +491,22 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 		if(range <= 0) //base case
 			return;
 
-		if(horzPos > 0 && trace.indexOf("_"+cols[horzPos-1]+rows[vertPos]+"_") == -1)
+		if(horzPos > 0 && trace.indexOf("_"+cols[horzPos-1]+","+rows[vertPos]+"_") == -1)
 			recurseRange(horzPos-1, vertPos, range, params, list, trace);
 
-		if(horzPos < cols.length-1 && trace.indexOf("_"+cols[horzPos+1]+rows[vertPos]+"_") == -1)
+		if(horzPos < cols.length-1 && trace.indexOf("_"+cols[horzPos+1]+","+rows[vertPos]+"_") == -1)
 			recurseRange(horzPos+1, vertPos, range, params, list, trace);
 
-		if(vertPos > 0 && trace.indexOf("_"+cols[horzPos]+rows[vertPos-1]+"_") == -1)
+		if(vertPos > 0 && trace.indexOf("_"+cols[horzPos]+","+rows[vertPos-1]+"_") == -1)
 			recurseRange(horzPos, vertPos-1, range, params, list, trace);
 
-		if(vertPos < rows.length-1 && trace.indexOf("_"+cols[horzPos]+rows[vertPos+1]+"_") == -1)
+		if(vertPos < rows.length-1 && trace.indexOf("_"+cols[horzPos]+","+rows[vertPos+1]+"_") == -1)
 			recurseRange(horzPos, vertPos+1, range, params, list, trace);
     };
     
     function recurseItemRange(horzPos, vertPos, range, list, itemList, trace){
 		if(trace.length > 1){
-			var coord = cols[horzPos]+rows[vertPos];
+			var coord = cols[horzPos]+","+rows[vertPos];
 			var tile = terrainLocs[coord];
 
 			var classCost = terrainIndex[terrainLocs[coord].type].Flier;
@@ -476,10 +521,10 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 		if(range <= 0) //base case
 			return;
 
-		if(horzPos > 0 && trace.indexOf("_"+cols[horzPos-1]+rows[vertPos]+"_") == -1 && list.indexOf(cols[horzPos-1]+rows[vertPos]) == -1)
+		if(horzPos > 0 && trace.indexOf("_"+cols[horzPos-1]+","+rows[vertPos]+"_") == -1 && list.indexOf(cols[horzPos-1]+","+rows[vertPos]) == -1)
 			recurseItemRange(horzPos-1, vertPos, range, list, itemList, trace);
 
-		if(horzPos < cols.length-1 && trace.indexOf("_"+cols[horzPos+1]+rows[vertPos]+"_") == -1 && list.indexOf(cols[horzPos+1]+rows[vertPos]) == -1)
+		if(horzPos < cols.length-1 && trace.indexOf("_"+cols[horzPos+1]+","+rows[vertPos]+"_") == -1 && list.indexOf(cols[horzPos+1]+","+rows[vertPos]) == -1)
 			recurseItemRange(horzPos+1, vertPos, range, list, itemList, trace);
 
 		if(vertPos > 0 && trace.indexOf("_"+cols[horzPos]+rows[vertPos-1]+"_") == -1 && list.indexOf(cols[horzPos]+rows[vertPos-1]) == -1)
@@ -490,8 +535,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 	}
 
     function formatItemRange(range) {
-        if (range.indexOf("~") != -1 && range.length > 1)
-            range = range.substring(range.indexOf("~") + 1, range.length);
+        if (range.indexOf("-") != -1 && range.length > 1)
+            range = range.substring(range.indexOf("-") + 1, range.length);
         range = range.trim();
         return parseInt(range) | 0;
     };
@@ -518,17 +563,6 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         else return str.substring(str.indexOf("\"") + 1, str.lastIndexOf("\""));
     };
 
-    function calcExpPercent(exp) {
-        if (exp.length < 3) return 0;
-
-        var split = exp.split("/");
-        var curr = parseInt(split[0].trim()) | 0;
-        var nextRank = parseInt(split[1].trim()) | 0;
-
-        if (curr == 0 || nextRank == 0) return 0;
-        else return curr / nextRank;
-    };
-
     function getItem(name) {
         var originalName = name;
         if (name != undefined && name.length > 0) {
@@ -537,23 +571,12 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             name = name.trim();
         }
 
-        if (name == undefined || name.length == 0 || itemIndex[name] == undefined)
-            return {
-                'name': name != undefined ? name : "",
-                'type': "Mystery",
-                'effective': "",
-                'critDmg' : 0,
-                'range' : "0",
-                'StrInv': 0,
-                'MagInv': 0,
-                'SklInv': 0,
-                'SpdInv': 0,
-                'LckInv': 0,
-                'DefInv': 0,
-                'ResInv': 0,
-                'MovInv': 0,
-                'desc': "This item could not be located."
-            }
+        if (name == undefined || name.length == 0 || itemIndex[name] == undefined){
+            var familiar = getFamiliar(name); //if not an item, try to locate familiar
+
+            if(familiar.effect.length > 0) return familiar;
+            else return getDefaultWeaponObj(name);
+        }
 
         var copy = Object.assign({}, itemIndex[name]);
         copy.name = originalName;
@@ -573,17 +596,58 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     function getClass(name) {
         if (name == undefined || name.length == 0 || classIndex[name] == undefined)
             return {
-                'name': name != undefined ? name : "",
-                'terrainType' : "",
-                'StrPair': 0,
-                'MagPair': 0,
-                'SklPair': 0,
-                'SpdPair': 0,
-                'LckPair': 0,
-                'DefPair': 0,
-                'ResPair': 0,
-                'MovPair': 0
+                'name': name != undefined ? name : "Undefined",
+                'weaknesses' : [],
+                'desc' : "",
+                'terrainType' : ""
             }
         else return classIndex[name];
+    };
+
+    function getMotif(name){
+        if (name == undefined || name.length == 0 || motifIndex[name] == undefined)
+        return {
+            'name': name != undefined ? name : "Undefined",
+            'weaknesses' : [],
+            'desc' : ""
+        }
+        else return motifIndex[name];
+    };
+
+    function getFamiliar(name){
+        if (name == undefined || name.length == 0 || familiarIndex[name] == undefined)
+            return getDefaultFamiliarObj(name);
+        else return familiarIndex[name];
+    };
+
+    function getDefaultWeaponObj(name){
+        return{
+            'name': name != undefined ? name : "",
+            'isFamiliar' : false,
+            'class': "Mystery",
+            'rank' : "",
+            'atkStat': "",
+            'range' : "",
+            'effect': "",
+            'desc' : "",
+            'StrEqpt': 0,
+            'MagEqpt': 0,
+            'SklEqpt': 0,
+            'SpdEqpt': 0,
+            'DefEqpt': 0,
+            'ResEqpt': 0,
+            'spriteUrl': "",
+        }
+    };
+
+    function getDefaultFamiliarObj(name){
+        return {
+            'name': name != undefined ? name : "",
+            'isFamiliar' : true,
+            'isCommand' : false,
+            'effect' : "",
+            'desc' : "",
+            'spriteUrl' : ""
+        }
     };
 }]);
