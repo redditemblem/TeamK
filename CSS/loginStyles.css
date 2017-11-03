@@ -1,7 +1,7 @@
 .authBackground{
 	position:absolute;
-	background-image: url("../IMG/background.png");
-    background-repeat: repeat;
+	background: linear-gradient( rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25) ), url("../IMG/background.png");
+	background-repeat: repeat;
 	height:100%;
 	width:100%;
 	top:0px;
@@ -24,10 +24,10 @@
 
 .authText{
 	position: relative;
-	width:720px;
-	height:138px;
-	left: calc(50% - 360px);
-	top: calc(50% - 69px);
+	width:542px;
+	height:216px;
+	left: calc(50% - 271px);
+	top: calc(50% - 158px);
 	text-align: center;
 }
 

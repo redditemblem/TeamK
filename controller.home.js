@@ -9,20 +9,20 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	var supportBonuses;
 
 	$scope.battleStatsList = [
-	                ["Atk", "60px"],
-	                ["Hit", "82px"],
-	                ["Crit", "104px"],
-	                ["Avo", "126px"],
-	                ["Eva", "148px"]
+	                ["Atk", "110px", "5px"],
+	                ["Hit", "110px", "95px"],
+	                ["Crit", "137px", "5px"],
+	                ["Avo", "137px", "95px"],
+	                ["Eva", "164px", "5px"]
 	               ];
 	$scope.statsList = [
-	                ["Str", "Strength. Affects damage the unit deals with physical attacks.",    "100px", "70px"],
-	                ["Mag", "Magic. Affects damage the unit deals with magical attacks.",        "122px", "92px"],
-	                ["Skl", "Skill. Affects hit rate and the frequency of critical hits.",       "144px", "113px"],
-	                ["Spd", "Speed. Affects Avo. Unit strikes twice if 5 higher than opponent.", "166px", "136px"],
-	                ["Def", "Defense. Reduces damage from physical attacks.",                    "210px", "180px"],
-	                ["Res", "Resistance. Reduces damage from physical attacks.",                 "232px", "202px"],
-					["Mov", "Movement. Affects how many blocks a unit can move in a turn.",      "254px", "210px"]
+	                ["Str", "Strength. Affects damage the unit deals with physical attacks.",    "5px"],
+	                ["Mag", "Magic. Affects damage the unit deals with magical attacks.",        "32px"],
+	                ["Skl", "Skill. Affects hit rate and the frequency of critical hits.",       "59px"],
+	                ["Spd", "Speed. Affects Avo. Unit strikes twice if 5 higher than opponent.", "86px"],
+	                ["Def", "Defense. Reduces damage from physical attacks.",                    "113px"],
+	                ["Res", "Resistance. Reduces damage from physical attacks.",                 "140px"],
+					["Mov", "Movement. Affects how many blocks a unit can move in a turn.",      "167px"]
 	               ];
 	
 	//Interval timers
@@ -302,8 +302,8 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     //***********************\\
     // FUNCTIONS FOR STAT    \\
     // PROCESSING/FORMATTING \\
-    //***********************\\
-
+	//***********************\\
+	
     //Returns true if the value in the passed attribute is >= 0
     $scope.checkRate = function(stat){ return parseInt(stat) >= 0; };
     
@@ -396,8 +396,8 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 
 	$scope.determineNametagColor = function(aff){
 		switch(aff){
-			case "The Pack" : return NAMETAG_BLUE;
-			case "Enemies" : return NAMETAG_RED;
+			case "Alistair's Army" : return NAMETAG_BLUE;
+			case "Bad Guys" : return NAMETAG_RED;
 			case "Ally" : return NAMETAG_GREEN;
 			case "Other" : return NAMETAG_PERIWINKLE;
 			default: return "#000000";

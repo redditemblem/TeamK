@@ -293,6 +293,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'mimic' : c[58] != "None" ? c[58] : "",
                 'behavior' : c[59] != undefined ? c[59] : "",
                 'desc' : c[60] != undefined ? c[60] : "",
+                'portrait' : c[61] != undefined ? c[61] : ""
             };
 
             //Inventory
@@ -321,6 +322,13 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             //Skills
             for (var k = 26; k < 33; k++)
                 currObj.skills["skl" + (k - 25)] = getSkill(c[k]);
+
+            //Calculate battle stats
+            currObj.Atk = 0;
+            currObj.Hit = 0;
+            currObj.Crit = 0;
+            currObj.Avo = 0;
+            currObj.Eva = 0;
 
             characters["char_" + i] = currObj;
         }
@@ -409,34 +417,50 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
                 //Calculate max ranges
 				var maxAtkRange = 0;
-				var maxHealRange = 0;
+                var maxHealRange = 0;
+                var isWonder = false;
 				for (var i in char.inventory) {
                     var item = char.inventory[i];
                     if(item.isFamiliar) continue; //skip familiars
 
 					var r = formatItemRange(item.range);
 					if (isAttackingItem(item.class) && r > maxAtkRange && r <= 10) maxAtkRange = r;
-					else if (!isAttackingItem(item.class) && r > maxHealRange && r <= 10) maxHealRange = r;
+                    else if (!isAttackingItem(item.class) && r > maxHealRange && r <= 10){ 
+                        if(item.class == "Wonder") isWonder = true;
+                        else isWonder = false;
+                        maxHealRange = r;
+                    }
 				}
 
                 if(char.equippedWeapon.name.length > 0){
                     var eR = formatItemRange(char.equippedWeapon.range);
                     if (isAttackingItem(char.equippedWeapon.class) && eR > maxAtkRange && r <= 10) maxAtkRange = eR;
-                    else if (!isAttackingItem(char.equippedWeapon.class) && eR > maxHealRange && r <= 10) maxHealRange = eR;
+                    else if (!isAttackingItem(char.equippedWeapon.class) && eR > maxHealRange && r <= 10){ 
+                        if(char.equippedWeapon.class == "Wonder") isWonder = true;
+                        else isWonder = false;
+                        maxHealRange = eR;
+                    }
                 }
 
-				/*for(var s in char.skills){
+                var hasHover = false;
+
+				for(var s in char.skills){
 					var skl = char.skills[s];
 					switch(skl.name){
-						case "Radiance" : if(maxHealRange > 0) maxHealRange += 1; break;
+                        case "Water Walker" : break;
+                        case "Mountain Climber" : break;
+                        case "Hover" : hasHover = true; break;
+                        case "Wondrous" : if(isWonder) maxHealRange += 1; break;
+                        case "Phantom Edge" : if(maxAtkRange == 1) maxAtkRange = 2; break;
 					}
-				}*/
+				}
 
 				var params = {
 					'atkRange' : maxAtkRange,
 					'healRange' : maxHealRange,
 					'terrainClass' : char.class.terrainType,
-					'affiliation' : char.affiliation
+                    'affiliation' : char.affiliation,
+                    'hasHover' : hasHover
 				};
 
 				recurseRange(horz, vert, range, params, list, "_");

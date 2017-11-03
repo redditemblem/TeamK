@@ -82,11 +82,27 @@
 			<img src="IMG/close.png">
 		</div>
 		<!--Name, Class, Lvl-->
-		<div class="infoElement whiteText charNamePos" ng-mouseenter="nameHoverIn(cIndex)" ng-mouseleave="nameHoverOut(cIndex)" ng-style="{'background-color': determineNametagColor(char.affiliation)}" style="text-align: center;">
-			<span style="position: relative; font-size: 18px; top: calc(50% - 17px);">{{char.name}}</span><br />
-			<span style="position: relative; top: 2px; font-size: 10px; height: 14px; vertical-align: middle;">
-				Lvl. {{char.level}}
-			</span>
+		<div class="infoElement whiteText charNamePos" ng-mouseenter="nameHoverIn(cIndex)" ng-mouseleave="nameHoverOut(cIndex)" ng-style="{'background-color': determineNametagColor(char.affiliation)}">
+			<div ng-if="char.portrait.length > 0" class="charPortrait" ng-style="{'color': determineNametagColor(char.affiliation), 'background-image': 'url({{char.portrait}})'}"></div>
+			<div style="position: relative; top: 8px; left: 10px;">
+				<div class="boldText">{{char.name}}</div>
+				<div class="indentedClassName">Lvl. {{char.level}} {{char.class.name}}</div>
+			</div>
+		</div>
+		<!--Battle stats-->
+		<div class="infoElement darkTan2 tanText HPText">
+			<span class="HpStatLabel">HP</span>
+			<span class="currHPText">{{char.currHp}} /</span>
+			<span class="maxHPText">{{char.maxHp}}</span>
+		</div>
+		<div ng-repeat="stat in battleStatsList" class="infoElement darkTan2 tanText battleStatBox" ng-style="{top: stat[1], left: stat[2]}">
+			<span class="indentedStatLabel">{{stat[0]}}</span>
+			<span class="indentedStat">{{char[stat[0]]}}</span>
+		</div>
+		<!--Stats-->
+		<div ng-repeat="stat in statsList" ng-mouseenter="statHoverIn(cIndex, $index)" ng-mouseleave="statHoverOut(cIndex, $index)" class="infoElement darkTan hoverTan3 statBox" ng-style="{top: stat[2]}">
+			<span class="indentedStatLabel tanText">{{stat[0]}}</span>
+			<span class="indentedStat" ng-style="{color: getStatColor(cIndex, stat[0])}">{{char[stat[0]]}}</span>
 		</div>
 	</div>
 
