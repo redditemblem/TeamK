@@ -80,6 +80,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                     itemIndex[itm[0]] = {
                         'name': itm[0],
                         'isFamiliar' : false,
+                        'equipped' : false,
                         'class': itm[1],
                         'rank' : itm[2],
                         'atkStat': itm[3],
@@ -175,6 +176,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                     'name': f[0],
                     'isFamiliar' : true,
                     'isCommand' : f[2].trim() == "Command",
+                    'equipped' : false,
                     'effect' : f[3],
                     'desc' : f[4],
                     'spriteUrl' : f[5]
@@ -304,18 +306,11 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             //Replace equipped item & familiar with ghost
             var inv = c.slice(20, 25); //grab inventory items
             var eqpIndex = inv.indexOf(currObj.equippedWeapon.name);
-            var famIndex = inv.indexOf(currObj.familiar.name);
             if(currObj.equippedWeapon.name.length > 0 && eqpIndex > -1){
                 var key = "itm_" + (eqpIndex+1);
                 currObj.inventory[key] = getDefaultWeaponObj(currObj.equippedWeapon.name);
                 currObj.inventory[key].class = currObj.equippedWeapon.class;
-                currObj.inventory[key].icoOverride = currObj.equippedWeapon.icoOverride;
-                currObj.inventory[key].equipped = true;
-            }
-            if(currObj.familiar.name.length > 0 && famIndex > -1){
-                var key = "itm_" + (famIndex+1);
-                currObj.inventory[key] = getDefaultFamiliarObj(currObj.familiar.name);
-                currObj.inventory[key].spriteUrl = currObj.familiar.spriteUrl;
+                currObj.inventory[key].spriteUrl = currObj.equippedWeapon.spriteUrl;
                 currObj.inventory[key].equipped = true;
             }
 
@@ -611,8 +606,9 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         if (name == undefined || name.length == 0 || skillIndex[name] == undefined)
             return {
                 'name': name != undefined ? name : "",
-                'desc': "This skill could not be located.",
-                'spriteUrl': ""
+                'category' : "",
+                'isCommand' : false,
+                'desc': "This skill could not be located."
             }
         else return skillIndex[name];
     };
@@ -648,6 +644,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         return{
             'name': name != undefined ? name : "",
             'isFamiliar' : false,
+            'equipped' : false,
             'class': "Mystery",
             'rank' : "",
             'atkStat': "",
@@ -669,9 +666,10 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             'name': name != undefined ? name : "",
             'isFamiliar' : true,
             'isCommand' : false,
+            'equipped' : false,
             'effect' : "",
             'desc' : "",
-            'spriteUrl' : ""
+            'spriteUrl' : "", 
         }
     };
 }]);

@@ -12,8 +12,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	                ["Atk", "110px", "5px"],
 	                ["Hit", "110px", "95px"],
 	                ["Crit", "137px", "5px"],
-	                ["Avo", "137px", "95px"],
-	                ["Eva", "164px", "5px"]
+	                ["Avo", "137px", "95px"]
 	               ];
 	$scope.statsList = [
 	                ["Str", "Strength. Affects damage the unit deals with physical attacks.",    "5px"],
@@ -21,20 +20,19 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	                ["Skl", "Skill. Affects hit rate and the frequency of critical hits.",       "59px"],
 	                ["Spd", "Speed. Affects Avo. Unit strikes twice if 5 higher than opponent.", "86px"],
 	                ["Def", "Defense. Reduces damage from physical attacks.",                    "113px"],
-	                ["Res", "Resistance. Reduces damage from physical attacks.",                 "140px"],
-					["Mov", "Movement. Affects how many blocks a unit can move in a turn.",      "167px"]
+	                ["Res", "Resistance. Reduces damage from physical attacks.",                 "140px"]
 	               ];
 	
 	//Interval timers
     var dragNDrop = $interval(initializeListeners, 250, 20);
     
     //Positioning constants
-    const weaponVerticalPos = ["35px", "65px", "95px", "125px", "155px", "185px", "215px", "245px"];
+    const weaponVerticalPos = ["59px", "86px", "113px", "140px", "167px"];
 	const weaponRankHorzPos = ["290px", "340px", "290px", "340px"];
 	const weaponRankVertPos = ["200px", "200px", "225px", "225px"];
-    const weaponDescVerticalPos = ["25px", "45px", "65px", "85px", "105px", "125px", "145px", "165px"];
-    const skillVerticalPos = ["33px", "61px", "89px", "117px", "145px", "173px", "201px"];
-    const skillDescVerticalPos = ["5px", "15px", "22px", "29px", "36px", "43px", "50px", "57px", "63px"];
+    const weaponDescVerticalPos = ["35px", "50px", "65px", "80px", "95px"];
+    const skillVerticalPos = ["5px", "32px", "59px", "86px", "113px", "140px", "167px"];
+    const skillDescVerticalPos = ["5px", "20px", "35px", "50px", "65px", "80px", "95px"];
     
     //Constants
     const STAT_DEFAULT_COLOR = "#ffffff";
@@ -291,7 +289,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	$scope.fetchSklDescVerticalPos = function(index){ return skillDescVerticalPos[index]; };
 
 	$scope.textTooLong = function(textA, textB){
-		return (textA.length + textB.length) > 200;
+		return (textA.length + textB.length) > 180;
 	};
 
 	$scope.setItemDescHeight = function(type){

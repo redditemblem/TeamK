@@ -1,6 +1,6 @@
 .characterInfo{
 	height:276px;
-	width:550px;
+	width:655px;
 	left:0px;
 	top:20px;
 	position: absolute;
@@ -57,26 +57,11 @@
 	background-color: dimgray;
 }
 
-.heatMeter{
-	display: inline-block;
-	width: 100px;
-	height: 10px;
-	background: linear-gradient(to right, green , yellow, orange, red); /* Standard syntax */
-}
-
-.heatMeterLine{
-	position: relative;
-	border-left: 2px solid black;
-	height: 8px;
-	width: 3px;
-}
-
-.heatMeterNum{
-	position: relative;
-	color: white;
-	font-size: 10px;
-	top: 12px;
-	left: -7px;
+.movExpBox{
+	position: absolute;
+	height: 21px;
+	width: 70px;
+	left: 135px;
 }
 
 .statBox{
@@ -117,6 +102,13 @@
 	font-size: 12px;
 }
 
+.indentedStat2{
+	position: absolute;
+	left:45px;
+	top:3px;
+	font-size: 12px;
+}
+
 .largeIndentedStat{
 	position: absolute;
 	left:60px;
@@ -132,8 +124,8 @@
 
 .indentedWeaponName{
 	position: absolute;
-	left:31px;
-	top:6px;
+	left:30px;
+	top:5px;
 	font-size: 10px;
 }
 
@@ -141,7 +133,7 @@
 .indentedWeaponIcon{
 	position: absolute;
 	left:10px;
-	top:5px;
+	top:4px;
 	display:inline-block;
 }
 
@@ -235,21 +227,21 @@
 
 .skillPos{
 	width:165px;
-	left:380px;
-	height:23px;
+	left:485px;
+	height:22px;
 }
 
 .skillInfoPos{
 	overflow-y: hidden;
 	width:250px;
-	left:125px;
+	left:230px;
 	height:125px;
 }
 
 .statInfoPos{
 	overflow-y: hidden;
 	width:150px;
-	left:280px;
+	left:315px;
 	height:63px;
 }
 
@@ -431,14 +423,14 @@
 
 .itemsPos{
 	width:165px;
-	left:5px;
-	height:25px;
+	left:315px;
+	height:22px;
 }
 
 .itemInfoPos{
 	font-size:11px;
 	width:240px;
-	left:175px;
+	left:70px;
 	height:135px;
 }
 
