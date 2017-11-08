@@ -1,6 +1,6 @@
 app.service('DataService', ['$rootScope', function($rootScope) {
     const sheetId = '1fwzq_64mPMmCndomAe7sZeBrhJEhR9S-CJvIitzVrDI';
-    const updateVal = (100 / 13) + 0.1;
+    const updateVal = (100 / 14) + 0.1;
     const boxWidth = 16;
     const gridWidth = 0;
     var progress = 0;
@@ -9,7 +9,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     var enemies = null;
     var rows = [];
     var cols = [];
-    var map, characterData, classIndex, itemIndex, skillIndex, motifIndex, familiarIndex, coordMapping, terrainIndex, terrainLocs;
+    var map, characterData, classIndex, itemIndex, skillIndex, motifIndex, familiarIndex, statusIndex, coordMapping, terrainIndex, terrainLocs;
 
     this.getCharacters = function() { return characters; };
     this.getMap = function() { return map; };
@@ -184,6 +184,32 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             }
 
                 updateProgressBar();
+                fetchStatusIndex();
+        });
+    };
+
+    function fetchStatusIndex() {
+        gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: sheetId,
+            majorDimension: "ROWS",
+            range: 'Statuses!A2:D',
+        }).then(function(response) {
+            var statuses = response.result.values;
+            statusIndex = {};
+
+            for (var i = 0; i < statuses.length; i++) {
+                var s = statuses[i];
+                if (s.length == 0 || s[0].length == 0) continue;
+
+                statusIndex[s[0]] = {
+                    'name': s[0],
+                    'category' : s[1] == "Positive" ? "+" : (s[1] == "Negative" ? "-" : " "),
+                    'duration' : parseInt(s[2]) | 0,
+                    'desc' : s[3]
+                }
+            }
+
+                updateProgressBar();
                 fetchTerrainIndex();
         });
     };
@@ -192,7 +218,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Terrain Chart!A2:K',
+            range: 'Terrain Chart!A2:L',
         }).then(function(response) {
             var rows = response.result.values;
             terrainIndex = {};
@@ -211,8 +237,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                     'Monster' : r[7],
                     'Mage' : r[8],
                     'Flier' : r[9],
-                    'effect' : r[10] != "No effect." ? r[10] : "",
-                    'desc': r[11] != "No notes." ? r[11] : ""
+                    'effect' : r[10] != undefined ? r[10] : "",
+                    'desc': r[11] !=  undefined ? r[11] : ""
                 }
             }
 
@@ -265,7 +291,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'inventory' : {},
                 'familiar' : getFamiliar(c[25]),
                 'skills' : {},
-                'statuses' : {},
+                'statuses' : [],
                 'HpBuff' : c[38].length > 0 ? parseInt(c[38]) : 0,
                 'StrBuff' : c[39].length > 0 ? parseInt(c[39]) : 0,
                 'MagBuff' : c[40].length > 0 ? parseInt(c[40]) : 0,
@@ -284,18 +310,18 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'MovBoost' : c[53].length > 0 ? parseInt(c[53]) : 0,
                 'weaponRanks' : {
                     'wpn1' : {
-                        'class' : c[54],
-                        'exp' : c[55]
+                        'class' : c[55],
+                        'exp' : c[56]
                     },
                     'wpn2' : {
-                        'class' : c[56],
-                        'exp' : c[57]
+                        'class' : c[57],
+                        'exp' : c[58]
                     }
                 },
-                'mimic' : c[58] != "None" ? c[58] : "",
-                'behavior' : c[59] != undefined ? c[59] : "",
-                'desc' : c[60] != undefined ? c[60] : "",
-                'portrait' : c[61] != undefined ? c[61] : ""
+                'mimic' : c[59] != "None" ? c[59] : "",
+                'behavior' : c[60] != undefined ? c[60] : "",
+                'desc' : c[61] != undefined ? c[61] : "",
+                'portrait' : c[62] != undefined ? c[62] : ""
             };
 
             //Inventory
@@ -318,12 +344,19 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             for (var k = 26; k < 33; k++)
                 currObj.skills["skl" + (k - 25)] = getSkill(c[k]);
 
+            //Statuses
+            for(var l = 34; l < 39; l++)
+                if(c[l].length > 0)
+                    currObj.statuses.push(getStatus(c[l]));
+            
             //Calculate battle stats
             currObj.Atk = 0;
             currObj.Hit = 0;
             currObj.Crit = 0;
             currObj.Avo = 0;
             currObj.Eva = 0;
+
+            currObj.weaknesses = currObj.class.weaknesses.concat(currObj.motif.weaknesses);
 
             characters["char_" + i] = currObj;
         }
@@ -618,7 +651,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             return {
                 'name': name != undefined ? name : "Undefined",
                 'weaknesses' : [],
-                'desc' : "",
+                'desc' : "This class could not be located.",
                 'terrainType' : ""
             }
         else return classIndex[name];
@@ -629,7 +662,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         return {
             'name': name != undefined ? name : "Undefined",
             'weaknesses' : [],
-            'desc' : ""
+            'desc' : "This motif could not be located."
         }
         else return motifIndex[name];
     };
@@ -638,6 +671,17 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         if (name == undefined || name.length == 0 || familiarIndex[name] == undefined)
             return getDefaultFamiliarObj(name);
         else return familiarIndex[name];
+    };
+
+    function getStatus(name){
+        if (name == undefined || name.length == 0 || statusIndex[name] == undefined)
+            return {
+                'name' : name,
+                'category' : "",
+                'duration' : 0,
+                'desc' : "This status could not be located."
+            }
+        else return statusIndex[name];
     };
 
     function getDefaultWeaponObj(name){

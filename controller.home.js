@@ -9,10 +9,10 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	var supportBonuses;
 
 	$scope.battleStatsList = [
-	                ["Atk", "110px", "5px"],
-	                ["Hit", "110px", "95px"],
-	                ["Crit", "137px", "5px"],
-	                ["Avo", "137px", "95px"]
+	                ["Atk", "130px", "5px"],
+	                ["Hit", "130px", "95px"],
+	                ["Crit", "157px", "5px"],
+	                ["Avo", "157px", "95px"]
 	               ];
 	$scope.statsList = [
 	                ["Str", "Strength. Affects damage the unit deals with physical attacks.",    "5px"],
@@ -28,8 +28,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     
     //Positioning constants
     const weaponVerticalPos = ["59px", "86px", "113px", "140px", "167px"];
-	const weaponRankHorzPos = ["290px", "340px", "290px", "340px"];
-	const weaponRankVertPos = ["200px", "200px", "225px", "225px"];
+	const weaponRankHorzPos = ["125px", "175px"];
     const weaponDescVerticalPos = ["35px", "50px", "65px", "80px", "95px"];
     const skillVerticalPos = ["5px", "32px", "59px", "86px", "113px", "140px", "167px"];
     const skillDescVerticalPos = ["5px", "20px", "35px", "50px", "65px", "80px", "95px"];
@@ -282,7 +281,6 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     };
     
 	$scope.fetchWeaponVerticalPos = function(index){ return weaponVerticalPos[index]; };
-	$scope.fetchWpnRankVertPos = function(index){ return weaponRankVertPos[index]; };
     $scope.fetchWpnRankHorzPos = function(index){ return weaponRankHorzPos[index]; };
     $scope.fetchWpnDescVerticalPos = function(index){ return weaponDescVerticalPos[index]; };
     $scope.fetchSklVerticalPos = function(index){ return skillVerticalPos[index]; };
@@ -293,7 +291,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	};
 
 	$scope.setItemDescHeight = function(type){
-		if(type != "Item" && type != "Consumable" && type != "Gear" && type != "Mystery") return "70px";
+		if(type != "Item" && type != "Consumable" && type != "Wonder" && type != "Mystery") return "70px";
     	else return "108px";
 	};
  
@@ -384,11 +382,11 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     };
     
     $scope.notItem = function(type){
-    	return type != "Staff" && type != "Consumable" && type != "Item" && type != "Gear" && type != "Mystery";
+    	return type != "Wonder" && type != "Consumable" && type != "Item" && type != "Mystery";
     };
     
     $scope.setDescriptionLoc = function(type){
-    	if(type != "Staff" && type != "Consumable" && type != "Item" && type != "Gear" && type != "Mystery") return "60px";
+    	if(type != "Wonder" && type != "Consumable" && type != "Item" && type != "Mystery") return "60px";
     	else return "25px";
     };
 
@@ -417,6 +415,10 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 		if($scope[char+"_boxhover"] == true) return ($scope.rows.length + 2) + "";
 		else return ($scope.rows.length + 1) + "";
 	};
+
+	$scope.nameHoverIn = function(char){ $scope[char + "name"] = true; };
+	$scope.nameHoverOut = function(char){ $scope[char + "name"] = false; };
+	$scope.nameHoverOn = function(char){ return $scope[char + "name"] == true; };
 	
     $scope.weaponHoverIn = function(char, index){ $scope[char + "wpn_" + index] = true; };
     $scope.weaponHoverOut = function(char, index){ $scope[char + "wpn_" + index] = false; };
@@ -434,13 +436,13 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	$scope.statusHoverOut = function(char){ $scope[char + "status"] = false; };
 	$scope.statusHoverOn = function(char){ return $scope[char + "status"] == true; };
 
-	$scope.behaviorHoverIn = function(char){ $scope[char + "behv"] = true; };
-	$scope.behaviorHoverOut = function(char){ $scope[char + "behv"] = false; };
-	$scope.behaviorHoverOn = function(char){ return $scope[char + "behv"] == true; };
+	$scope.terrainHoverIn = function(char){ $scope[char + "tile"] = true; };
+	$scope.terrainHoverOut = function(char){ $scope[char + "tile"] = false; };
+	$scope.terrainHoverOn = function(char){ return $scope[char + "tile"] == true; };
 
-	$scope.nameHoverIn = function(char){ $scope[char + "name"] = true; };
-	$scope.nameHoverOut = function(char){ $scope[char + "name"] = false; };
-	$scope.nameHoverOn = function(char){ return $scope[char + "name"] == true; };
+	$scope.motifHoverIn = function(char){ $scope[char + "motif"] = true; };
+	$scope.motifHoverOut = function(char){ $scope[char + "motif"] = false; };
+	$scope.motifHoverOn = function(char){ return $scope[char + "motif"] == true; };
     
     //*************************\\
     // SUPPORT FOR DRAGABILITY \\

@@ -84,7 +84,7 @@
 		<!--Name, Class, Lvl-->
 		<div class="infoElement whiteText charNamePos" ng-mouseenter="nameHoverIn(cIndex)" ng-mouseleave="nameHoverOut(cIndex)" ng-style="{'background-color': determineNametagColor(char.affiliation)}">
 			<div ng-if="char.portrait.length > 0" class="charPortrait" ng-style="{'color': determineNametagColor(char.affiliation), 'background-image': 'url({{char.portrait}})'}"></div>
-			<div style="position: relative; top: 8px; left: 10px;">
+			<div style="position: relative; top: 18px; left: 10px;">
 				<div class="boldText">{{char.name}}</div>
 				<div class="indentedClassName">Lvl. {{char.level}} {{char.class.name}}</div>
 			</div>
@@ -95,11 +95,11 @@
 			<span class="currHPText">{{char.currHp}} /</span>
 			<span class="maxHPText">{{char.maxHp}}</span>
 		</div>
-		<div class="infoElement darkTan tanText movExpBox" style="top: 59px;">
+		<div class="infoElement darkTan tanText movExpBox" style="top: 79px;">
 			<span class="indentedStatLabel">Mov</span>
 			<span class="indentedStat2">{{char.Mov}}</span>
 		</div>
-		<div class="infoElement darkTan movExpBox tanText" style="top: 84px;">
+		<div class="infoElement darkTan movExpBox tanText" style="top: 104px;">
 			<span class="indentedStatLabel">EXP</span>
 			<span class="indentedStat2">{{char.exp}}</span>
 		</div>
@@ -129,15 +129,55 @@
 		<div ng-repeat="skill in char.skills" class="infoElement redText hoverTan lightTan hoverTan skillPos" ng-mouseover="skillHoverIn(cIndex, $index)" ng-mouseleave="skillHoverOut(cIndex, $index)" ng-style="{top: fetchSklVerticalPos($index)}">
 			<span class="indentedSkillName" ng-if="validSkill(skill.name)">{{skill.name}}</span>
 		</div>
+		<!--Weaknesses-->
+		<div class="infoElement darkTan tanText weaknessBox">
+			<div ng-repeat="w in char.weaknesses" class="weaknessIcon" title="{{w}}"></div>
+		</div>
+		<!--Weapon ranks-->
+		<div ng-repeat="w in char.weaponRanks" class="infoElement weaponRankPos" ng-style="{left: fetchWpnRankHorzPos($index)}">
+				<span ng-if="existsWeapon(w.class)"
+					  title="{{w.class}} Rank"
+					  style="position:relative">
+					<img ng-src="{{weaponIcon(w.class)}}" style="display:inline-block">
+					<div class="weaponRankBackground"></div>
+					<div class="weaponRankBar" ng-style="{width: calcWeaponExp(w.exp)+'px'}"></div>
+					<div class="weaponRankBorder"></div>
+					<div class="weaponRankLtrPos redText" style="font-size: 14px;">A</div>
+				</span>
+			</div>
+		<!--Motif-->
+		<div class="infoElement darkTan2 hoverTan3 tanText motifBox" ng-mouseover="motifHoverIn(cIndex)" ng-mouseleave="motifHoverOut(cIndex)">
+			{{char.motif.name}}
+		</div>
+		<!--Gold-->
+		<div class="infoElement darkTan2 tanText goldBox">{{char.money}} G</div>
+		<!--Status-->
+		<div class="infoElement darkTan2 hoverTan3 tanText statusBox" ng-mouseover="statusHoverIn(cIndex)" ng-mouseleave="statusHoverOut(cIndex)">
+			{{char.statuses.length}} Status<span ng-if="char.statuses.length != 1">es</span>
+		</div>
+		<!--Terrain-->
+		<div class="infoElement darkTan2 hoverTan3 tanText terrainBox" ng-mouseover="terrainHoverIn(cIndex)" ng-mouseleave="terrainHoverOut(cIndex)">
+			{{terrainLocs[char.position].type}}
+		</div>
+		<!--Name Info Box-->
+		<div ng-if="nameHoverOn(cIndex)" class="infoElement green whiteText nameInfoPos">
+			<div class="popOutText popOutHeader">
+				<span ng-if="char.desc.length > 0" style="display:inline-block;">{{char.desc}}</span>
+				<span ng-if="char.behavior.length > 0" class="italicText" style="display:inline-block;" ng-style="{'margin-top' : char.desc.length > 0 ? '3px' : '0px'}">{{char.behavior}}</span>
+				<span style="display:inline-block;" ng-style="{'margin-top' : char.desc.length > 0 || char.behavior.length > 0 ? '10px' : '0px'}">
+					<span class="boldText">{{char.class.name}}</span>: {{char.class.desc}}
+				</span>
+			</div>
+		</div>
 		<!--Stat info boxes-->
 		<div ng-repeat="stat in statsList">
 			<div ng-if="statHoverOn(cIndex, $index)" class="infoElement green whiteText statInfoPos" ng-style="{top: stat[2]}">
-				<span class="popOutText popOutHeader">
+				<div class="popOutText popOutHeader">
 					<span>Base: {{char[stat[0]]}}<br /></span>
 					<span ng-if="char.equippedWeapon[stat[0]+'Eqpt'] != 0">{{char.equippedWeapon.name}}: {{char.equippedWeapon[stat[0]+'Eqpt']}}<br /></span>
 					<span ng-if="char[stat[0]+'Buff'] != 0">Buff/Debuff: {{char[stat[0]+'Buff']}}<br /></span>
 					<span ng-if="char[stat[0]+'Boost'] != 0">Boost: {{char[stat[0]+'Boost']}}<br /></span>
-				</span>
+				</div>
 			</div>
 		</div>
 		<!--Inventory Desc-->
@@ -211,6 +251,30 @@
 				<div class="boldText popOutText popOutHeader">{{skill.name}}</div>
 				<div class="customDivider" style="top:20px"></div>
 				<div class="popOutText popOutBody"><span ng-if="skill.isCommand" class="italicText">[Command] </span>{{skill.desc}}</div>
+			</div>
+		</div>
+		<!--Motif Info Box-->
+		<div ng-if="motifHoverOn(cIndex)" class="infoElement green whiteText motifInfoPos">
+			<div class="popOutText popOutHeader">
+				<div class="boldText">{{char.motif.name}}</div>
+				<div class="italicText">Weaknesses: <span ng-repeat="w in char.motif.weaknesses">{{w}}<span ng-if="!$last">, </span></span><span ng-if="char.motif.weaknesses.length == 0">None</span></div>
+				<div style="margin-top: 5px;">{{char.motif.desc}}</div>
+			</div>
+		</div>
+		<!--Status Info Box-->
+		<div ng-if="statusHoverOn(cIndex) && char.statuses.length > 0" class="infoElement green whiteText statusInfoPos">
+			<div class="popOutText popOutHeader">
+				<div ng-repeat="status in char.statuses | orderBy: ['category', 'name']" style="margin-bottom: 5px;">
+					({{status.category}}) <span class="boldText">{{status.name}}</span> [Turns: {{status.duration}}] - {{status.desc}}
+				</div>
+			</div>
+		</div>
+		<!--Terrain Info Box-->
+		<div ng-if="terrainHoverOn(cIndex)" class="infoElement green whiteText terrainInfoPos">
+			<div class="popOutText popOutHeader">
+				<div class="boldText">{{terrainLocs[char.position].type}} Tile</div>
+				<div class="italicText">{{terrainTypes[terrainLocs[char.position].type].avo}} Avo, {{terrainTypes[terrainLocs[char.position].type].def}} Def, {{terrainTypes[terrainLocs[char.position].type].heal}}% Healing</div>
+				<div style="margin-top: 5px;">{{terrainTypes[terrainLocs[char.position].type].effect}}<br/>{{terrainTypes[terrainLocs[char.position].type].desc}}</div>
 			</div>
 		</div>
 	</div>
