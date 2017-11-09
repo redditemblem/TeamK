@@ -275,8 +275,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'affiliation' : c[4],
                 'position' : c[5],
                 'hasMoved' : c[6] == "1",
-                'currHp' : c[7],
-                'maxHp' : c[8],
+                'currHp' : parseInt(c[7]) | 0,
+                'maxHp' : parseInt(c[8]) | 0,
                 'Str' : parseInt(c[9]),
                 'Mag' : parseInt(c[10]),
                 'Skl' : parseInt(c[11]),
@@ -292,22 +292,22 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'familiar' : getFamiliar(c[25]),
                 'skills' : {},
                 'statuses' : [],
-                'HpBuff' : c[38].length > 0 ? parseInt(c[38]) : 0,
-                'StrBuff' : c[39].length > 0 ? parseInt(c[39]) : 0,
-                'MagBuff' : c[40].length > 0 ? parseInt(c[40]) : 0,
-                'SklBuff' : c[41].length > 0 ? parseInt(c[41]) : 0,
-                'SpdBuff' : c[42].length > 0 ? parseInt(c[42]) : 0,
-                'DefBuff' : c[43].length > 0 ? parseInt(c[43]) : 0,
-                'ResBuff' : c[44].length > 0 ? parseInt(c[44]) : 0,
-                'MovBuff' : c[45].length > 0 ? parseInt(c[45]) : 0,
-                'HpBoost' : c[46].length > 0 ? parseInt(c[46]) : 0,
-                'StrBoost' : c[47].length > 0 ? parseInt(c[47]) : 0,
-                'MagBoost' : c[48].length > 0 ? parseInt(c[48]) : 0,
-                'SklBoost' : c[49].length > 0 ? parseInt(c[49]) : 0,
-                'SpdBoost' : c[50].length > 0 ? parseInt(c[50]) : 0,
-                'DefBoost' : c[51].length > 0 ? parseInt(c[51]) : 0,
-                'ResBoost' : c[52].length > 0 ? parseInt(c[52]) : 0,
-                'MovBoost' : c[53].length > 0 ? parseInt(c[53]) : 0,
+                'maxHpBuff' : c[39].length > 0 ? parseInt(c[39]) : 0,
+                'StrBuff' : c[40].length > 0 ? parseInt(c[40]) : 0,
+                'MagBuff' : c[41].length > 0 ? parseInt(c[41]) : 0,
+                'SklBuff' : c[42].length > 0 ? parseInt(c[42]) : 0,
+                'SpdBuff' : c[43].length > 0 ? parseInt(c[43]) : 0,
+                'DefBuff' : c[44].length > 0 ? parseInt(c[44]) : 0,
+                'ResBuff' : c[45].length > 0 ? parseInt(c[45]) : 0,
+                'MovBuff' : c[46].length > 0 ? parseInt(c[46]) : 0,
+                'maxHpBoost' : c[47].length > 0 ? parseInt(c[47]) : 0,
+                'StrBoost' : c[48].length > 0 ? parseInt(c[48]) : 0,
+                'MagBoost' : c[49].length > 0 ? parseInt(c[49]) : 0,
+                'SklBoost' : c[50].length > 0 ? parseInt(c[50]) : 0,
+                'SpdBoost' : c[51].length > 0 ? parseInt(c[51]) : 0,
+                'DefBoost' : c[52].length > 0 ? parseInt(c[52]) : 0,
+                'ResBoost' : c[53].length > 0 ? parseInt(c[53]) : 0,
+                'MovBoost' : c[54].length > 0 ? parseInt(c[54]) : 0,
                 'weaponRanks' : {
                     'wpn1' : {
                         'class' : c[55],
@@ -348,13 +348,16 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             for(var l = 34; l < 39; l++)
                 if(c[l].length > 0)
                     currObj.statuses.push(getStatus(c[l]));
-            
-            //Calculate battle stats
-            currObj.Atk = 0;
-            currObj.Hit = 0;
-            currObj.Crit = 0;
-            currObj.Avo = 0;
-            currObj.Eva = 0;
+
+            //Calculate true stats
+            currObj.TrueHp = calculateTrueStat(currObj, "maxHp");
+            currObj.TrueStr = calculateTrueStat(currObj, "Str");
+            currObj.TrueMag = calculateTrueStat(currObj, "Mag");
+            currObj.TrueSkl = calculateTrueStat(currObj, "Skl");
+            currObj.TrueSpd = calculateTrueStat(currObj, "Spd");
+            currObj.TrueDef = calculateTrueStat(currObj, "Def");
+            currObj.TrueRes = calculateTrueStat(currObj, "Res");
+            currObj.TrueMov = calculateTrueStat(currObj, "Mov");
 
             currObj.weaknesses = currObj.class.weaknesses.concat(currObj.motif.weaknesses);
 
@@ -413,9 +416,21 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             }
         }
 
-        for (var c in characters)
+        for (var c in characters){
+            var char = characters[c];
+
+            //Calculate battle stats
+            if(char.equippedWeapon.atkStat == "Physical") char.Atk = Math.floor(calculateAtk(char.TrueStr, char.equippedWeapon.might));
+            else if(char.equippedWeapon.atkStat == "Magical") char.Atk = Math.floor(calculateAtk(char.TrueMag, char.equippedWeapon.might));
+            else char.Atk = 0;
+
+            char.Hit = Math.floor(calculateHit(char.TrueSkl, char.equippedWeapon.hit));
+            char.Crit = Math.floor(calculateCrit(char.TrueSkl));
+            char.Avo = Math.floor(calculateAvo(char.TrueSpd,  terrainIndex[terrainLocs[char.position].type].avo));
+            
             if (terrainLocs[characters[c].position] != undefined)
                 terrainLocs[characters[c].position].occupiedAffiliation = characters[c].affiliation;
+        }
 
         updateProgressBar();
         calculateCharacterRanges();
@@ -692,6 +707,12 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             'class': "Mystery",
             'rank' : "",
             'atkStat': "",
+            'might': 0,
+            'hit': 0,
+            'crit': 0,
+            'guard' : 0,
+            'avo': 0,
+            'cEva': 0,
             'range' : "",
             'effect': "",
             'desc' : "",
@@ -716,4 +737,29 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             'spriteUrl' : "", 
         }
     };
+
+    //\\//\\//\\//\\//\\//
+    //   CALCULATIONS   //
+    //\\//\\//\\//\\//\\//
+
+    function calculateTrueStat(char, stat){
+        return char[stat] + char[stat+"Buff"] + char[stat+"Boost"] + (char.equippedWeapon[stat+"Eqpt"] != undefined ? char.equippedWeapon[stat+"Eqpt"] : 0);
+    };
+
+    function calculateAtk(strMag, wpnMight){
+        return strMag + wpnMight;
+    };
+
+    function calculateHit(skl, wpnAccuracy){
+        return (skl * 2.5) + wpnAccuracy;  
+    };
+
+    function calculateCrit(skl){
+        return (skl * 2.5);
+    };
+
+    function calculateAvo(spd, terrainBonus){
+        return (spd * 2.5) + terrainBonus;
+    };
+
 }]);

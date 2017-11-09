@@ -93,11 +93,11 @@
 		<div class="infoElement darkTan2 tanText HPText">
 			<span class="HpStatLabel">HP</span>
 			<span class="currHPText">{{char.currHp}} /</span>
-			<span class="maxHPText">{{char.maxHp}}</span>
+			<span class="maxHPText">{{char.TrueHp}}</span>
 		</div>
 		<div class="infoElement darkTan tanText movExpBox" style="top: 79px;">
 			<span class="indentedStatLabel">Mov</span>
-			<span class="indentedStat2">{{char.Mov}}</span>
+			<span class="indentedStat2">{{char.TrueMov}}</span>
 		</div>
 		<div class="infoElement darkTan movExpBox tanText" style="top: 104px;">
 			<span class="indentedStatLabel">EXP</span>
@@ -110,7 +110,7 @@
 		<!--Stats-->
 		<div ng-repeat="stat in statsList" ng-mouseenter="statHoverIn(cIndex, $index)" ng-mouseleave="statHoverOut(cIndex, $index)" class="infoElement darkTan hoverTan3 statBox" ng-style="{top: stat[2]}">
 			<span class="indentedStatLabel tanText">{{stat[0]}}</span>
-			<span class="indentedStat" ng-style="{color: getStatColor(cIndex, stat[0])}">{{char[stat[0]]}}</span>
+			<span class="indentedStat" ng-style="{color: getStatColor(cIndex, stat[0])}">{{char['True'+stat[0]]}}</span>
 		</div>
 		<!--Inventory-->
 		<div ng-mouseenter="weaponHoverIn(cIndex, -1)" ng-mouseleave="weaponHoverOut(cIndex, -1)" class="infoElement hoverTan2 itemsPos paleTan" style="top: 5px;">
