@@ -131,7 +131,7 @@
 		</div>
 		<!--Weaknesses-->
 		<div class="infoElement colorSecondaryLight whiteText weaknessBox">
-			<div ng-repeat="w in char.weaknesses" class="weaknessIcon" title="{{w}}"></div>
+			<img ng-repeat="w in char.weaknesses" ng-src="{{fetchWeaknessIcon(w)}}" class="weaknessIcon" title="{{w}}" />
 		</div>
 		<!--Weapon ranks-->
 		<div ng-repeat="w in char.weaponRanks"  ng-if="existsWeapon(w.class)" title="{{w.class}} Rank" class="infoElement weaponRankPos" ng-style="{left: fetchWpnRankHorzPos($index)}">

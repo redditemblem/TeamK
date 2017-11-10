@@ -322,6 +322,11 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 		else return STAT_DEFAULT_COLOR;
 	};
 
+	$scope.fetchWeaknessIcon = function(weak){
+		weak = weak.toLowerCase();
+		return `IMG/WEAK/${weak}.png`;
+	};
+
     //*************************\\
     // FUNCTIONS FOR INVENTORY \\
     // & WEAPONS PROFICIENCY   \\

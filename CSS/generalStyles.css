@@ -202,14 +202,14 @@ img{
 .whiteText{ color: white; }
 .blackText{ color: #000000;}
 .lightGrayText{ color: #6D4E86; }
-.droppableText{ color: rgb(211, 56, 0);}
+.droppableText{ color: rgb(214, 0, 54);}
 
 .colorBoxBackground{ background-color: #6e9348 ; }
 .colorDragBar{ background-color: #202d12; }
 .colorItemDark{ background-color: #98b951; }
 .colorItemLight{ background-color: #c8e487; }
 .colorSecondaryDark{ background-color: #202d12; }
-.colorSecondaryLight{ background-color: #fff562; }
+.colorSecondaryLight{ background-color: #dac23b; }
 .colorHoverBox{ background-color: rgb(207, 49, 78); opacity: 0.95;}
 
 .colorItemLightHover:hover{
