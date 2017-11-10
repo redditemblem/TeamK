@@ -34,9 +34,9 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     const skillDescVerticalPos = ["5px", "20px", "35px", "50px", "65px", "80px", "95px"];
     
     //Constants
-    const STAT_DEFAULT_COLOR = "#ffffff";
-    const STAT_BUFF_COLOR = "#42adf4";
-	const STAT_DEBUFF_COLOR = "#960000";
+    const STAT_DEFAULT_COLOR = "#000000";
+    const STAT_BUFF_COLOR = "#353cff";
+	const STAT_DEBUFF_COLOR = "#ff0000";
 	
 	const NAMETAG_BLUE = "#153af3";
 	const NAMETAG_RED = "#c00c13";
@@ -349,7 +349,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     //Returns the weapon rank icon relevant to the passed weapon type
     $scope.weaponIcon = function(wpnCls){ 
     	wpnCls = wpnCls.toLowerCase();
-    	return "IMG/RANK/rank_" + wpnCls + ".png";
+    	return `IMG/RANK/${wpnCls}.png`;
     };
     
     //Calculates the percentage of weapon proficicency for a specific weapon,

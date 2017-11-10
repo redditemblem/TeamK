@@ -28,32 +28,33 @@
 .weaponRankLtrPos{
 	position: absolute;
 	left: 20px;
-	bottom: 2px;
+	top: 1px;
+	font-size: 13px;
 }
 
 .weaponRankBar{
 	position: absolute;
 	height: 3px;
 	left: 0px;
-	bottom: -3px;
+	bottom: 0px;
 	background-color: #FFA600;
 }
 
 .weaponRankBorder{
 	position: absolute;
-	width: 28px;
+	width: 31px;
 	height: 2px;
 	left: 0px;
-	bottom: -3px;
+	bottom: -1px;
 	border: 1px solid black;
 }
 
 .weaponRankBackground{
 	position: absolute;
-	width: 30px;
+	width: 33px;
 	height: 3px;
 	left: 0px;
-	bottom: -3px;
+	bottom: 0px;
 	background-color: dimgray;
 }
 
@@ -395,8 +396,8 @@
 
 .weaponRankPos{
 	width:35px;
-	height:24px;
-	top: 184px;
+	height:20px;
+	top: 190px;
 }
 
 .itemsPos{

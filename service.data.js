@@ -311,11 +311,13 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'weaponRanks' : {
                     'wpn1' : {
                         'class' : c[55],
-                        'exp' : c[56]
+                        'exp' : calculateExpPercent(c[56]),
+                        'rank' : calculateWpnRank(c[56])
                     },
                     'wpn2' : {
                         'class' : c[57],
-                        'exp' : c[58]
+                        'exp' : calculateExpPercent(c[58]),
+                        'rank' : calculateWpnRank(c[58])
                     }
                 },
                 'mimic' : c[59] != "None" ? c[59] : "",
@@ -760,6 +762,29 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
     function calculateAvo(spd, terrainBonus){
         return (spd * 2.5) + terrainBonus;
+    };
+
+    function calculateExpPercent(exp){
+        const pixels = 33;
+        exp = parseInt(exp) | 0;
+
+        if(exp >= 150) return pixels;
+        else if(exp >= 100) return Math.floor(((exp-100)/50) * pixels);
+        else if(exp >= 60) return Math.floor(((exp-60)/540) * pixels);
+        else if(exp >= 30) return Math.floor(((exp-30)/30) * pixels);
+        else if(exp >= 10) return Math.floor(((exp-10)/20) * pixels);
+        else return Math.floor((exp/10) * pixels);
+    };
+
+    function calculateWpnRank(exp){
+        exp = parseInt(exp) | 0;
+
+        if(exp >= 150) return "S";
+        else if(exp >= 100) return "A";
+        else if(exp >= 60) return "B";
+        else if(exp >= 30) return "C";
+        else if(exp >= 10) return "D";
+        else return "E";
     };
 
 }]);

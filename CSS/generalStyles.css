@@ -12,24 +12,6 @@ img{
   -ms-interpolation-mode: nearest-neighbor;
 }
 
-.audioButton{
-	position: fixed;
-	bottom: 10px;
-	right: 10px;
-	width: 50px;
-	height: 50px;
-	border: 0px;
-	border-radius: 50%;
-	box-shadow: none;
-	background-color: #FFA600;
-	color: white;
-}
-
-.audioButton:hover{
-	cursor: pointer;
-	background-color: #c3db15;
-}
-
 .backgroundBox{
 	position:fixed;
 	top:0px;
@@ -88,32 +70,6 @@ img{
 	border: 1px solid black;
 }
 
-.expBarBack{
-	position: absolute;
-	width: calc(100% - 2px);
-	height: 5px;
-	left: 2px;
-	top: 17px;
-	background-color: dimgray;
-}
-
-.expBarFront{
-	position: absolute;
-	height: 5px;
-	left: 2px;
-	top: 17px;
-	background-color: #FFA600;
-}
-
-.expBarBorder{
-	position: absolute;
-	width: calc(100% - 4px);
-	height: 4px;
-	left: 2px;
-	top: 17px;
-	border: 1px solid black;
-}
-
 .infoElement{
 	position: absolute;
 	border-radius: 10px;
@@ -140,14 +96,6 @@ img{
 }
 
 .popOutTextSpacing{
-	margin-top:5px;
-}
-
-.supportsStyling{
-	font-size: 10px;
-	position: absolute;
-	margin-left:5px;
-	margin-right:5px;
 	margin-top:5px;
 }
 
@@ -247,124 +195,48 @@ img{
 	cursor: pointer;
 }
 
-.buttonPlayStyle{
-	position: relative;
-	width: 50px; 
-	height: 30px;
-	bottom: 13px;
-	right: 510px;
-	
- 	border: 0px;
- 	box-shadow: none;
- 	background-color: #fafafa;
- 	color: #505050;
- 	font-family: "Verdana";
-	font-size:10px;
-	cursor: pointer;
-}
-
-.speakerIcon{
-	position: relative;
-	font-family: "Verdana";
-	font-size: 16px;
-	bottom: 13px;
-	right: 650px;
-}
-
-.rangeStyle{
-	position: relative;
-	width: 150px; 
-	height: 30px;
-	bottom: 3px;
-	right: 650px;
-}
-
 .centerText{ text-align: center; }
 .rightText{ text-align: right; }
-.whiteText{ color: white; }
-.redText{ color: #000000;}
-.greenText{ color: #50FF50;}
-.tanText{ color: #eaeaea; }
-.lightGrayText{ color: #6D4E86; }
 .boldText{ font-weight: bold; }
 .italicText{ font-style: italic; }
+.whiteText{ color: white; }
+.blackText{ color: #000000;}
+.lightGrayText{ color: #6D4E86; }
+.droppableText{ color: rgb(211, 56, 0);}
 
-.navy{ background-color: #727472; }
-.paleTan{ background-color: #78508c  ; }
-.lightTan{ background-color: #966eb4 ; }
-.yellowTan{ background-color: #beaadc ; }
-.darkTan{ background-color: #6e6eb4 ; }
-.darkTan2{ background-color: #645096  ; }
-.olive{ background-color: #212121; }
-.lightGreen{ background-color: #39af2b; }
-.green{ background-color: gray; opacity: 0.95;}
+.colorBoxBackground{ background-color: #6e9348 ; }
+.colorDragBar{ background-color: #202d12; }
+.colorItemDark{ background-color: #98b951; }
+.colorItemLight{ background-color: #c8e487; }
+.colorSecondaryDark{ background-color: #202d12; }
+.colorSecondaryLight{ background-color: #fff562; }
+.colorHoverBox{ background-color: rgb(207, 49, 78); opacity: 0.95;}
+
+.colorItemLightHover:hover{
+	background-color: #e3ffa1!important;
+	cursor: pointer !important;
+}
+
+.colorItemDarkHover:hover{
+	background-color: #9acd32 !important;
+	cursor: pointer !important;
+}
+
+.colorSecondaryLightHover:hover{
+	background-color: #fff9b4 !important;
+	cursor: pointer !important;
+}
+
+.colorSecondaryDarkHover:hover{
+	background-color: #384d20 !important;
+	cursor: pointer !important;
+}
+
 .blackBorder{ border: 1px solid black; }
 .grayscale{ filter: grayscale(100%); }
-
 .transparentItem{ opacity: 0.5; }
 
-.hoverBrown:hover{
-	background-color: #5f605f !important;
-	cursor: pointer !important;
-}
-
-.hoverTan:hover{
-	background-color: #b88fe6 !important;
-	cursor: pointer !important;
-}
-
-.hoverTan2:hover{
-	background-color: #ab83bf !important;
-	cursor: pointer !important;
-}
-
-.hoverTan3:hover{
-	background-color: #8f8fd6 !important;
-	cursor: pointer !important;
-}
-
-.fireIcon{
-	position: absolute;
-	top: 0px;
-	left: 0px;
-}
-
-.enhancementRune{
-	position: absolute;
-	left: calc(50% - 31px);
-	top: calc(50% - 31px);
-	height: 62px;
-	width: 62px;
-	pointer-events: none;
-	image-rendering: pixelated;
-	/* Apply animation to this element */
-	-moz-animation: fadeInFadeOut 5s linear infinite;
-	-webkit-animation: fadeInFadeOut 5s linear infinite;
-	animation: fadeInFadeOut 5s linear infinite;
- }
- 
- @-moz-keyframes fadeInFadeOut {
-  0%   { opacity: 1.0; }
-  50%  { opacity: 0.50; }
-  100% { opacity: 1.0; }
- }
- @-webkit-keyframes fadeInFadeOut {
-  0%   { opacity: 1.0; }
-  50%  { opacity: 0.50; }
-  100% { opacity: 1.0; }
- }
- @keyframes fadeInFadeOut {
-  0%   { opacity: 1.0; }
-  50%  { opacity: 0.50; }
-  100% { opacity: 1.0; }
- }
-
- p{
-	 margin: 0;
-	 padding: 0;
- }
-
- .scroll-up {	
+.scroll-up {	
 	overflow: hidden;
 	position: relative;
    }
@@ -402,4 +274,4 @@ img{
 	-webkit-transform: translateY(-100%); /* Browser bug fix */
 	transform: translateY(-100%); 
 	}
-   }
+}
