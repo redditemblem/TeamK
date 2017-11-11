@@ -38,9 +38,10 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     const STAT_BUFF_COLOR = "#353cff";
 	const STAT_DEBUFF_COLOR = "#ff0000";
 	
-	const NAMETAG_BLUE = "#153af3";
+	const NAMETAG_BLUE = "#255bb2";
 	const NAMETAG_RED = "#c00c13";
 	const NAMETAG_GREEN = "#33bb33";
+	const NAMETAG_GREEN2 = "#9ef237";
 	const NAMETAG_PERIWINKLE = "#9988dd";
     
     //Reroutes the user if they haven't logged into the app
@@ -245,7 +246,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	};
 
 	$scope.getHPPercent = function(currHp, maxHp){
-		return Math.min((currHp/maxHp)*13, 13) + "px";
+		return Math.min((currHp/maxHp)*14, 14) + "px";
 	};
 
 	$scope.determineHPBackgroundColor = function(currHp, maxHp){
@@ -398,8 +399,9 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	$scope.determineNametagColor = function(aff){
 		switch(aff){
 			case "Alistair's Army" : return NAMETAG_BLUE;
-			case "Bad Guys" : return NAMETAG_RED;
-			case "Ally" : return NAMETAG_GREEN;
+			case "Crown Army" : return NAMETAG_RED;
+			case "Villagers" : return NAMETAG_GREEN2;
+			case "Allies" : return NAMETAG_GREEN;
 			case "Other" : return NAMETAG_PERIWINKLE;
 			default: return "#000000";
 		}

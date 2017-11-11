@@ -433,8 +433,8 @@
 
 .pairUpIcon{
 	position: absolute;
-	left: 2px;
-	bottom: 0px;
+	right: 10px;
+	bottom: 1px;
 }
 
 .indentedStatus{
@@ -453,9 +453,9 @@
 }
 
 .enemyNum{
-	position: relative;
-	bottom: 2px;
-	right: 0px;
+	position: absolute;
+	bottom: 1px;
+	right: -2px;
 }
 
 .charPortrait{

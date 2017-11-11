@@ -47,9 +47,9 @@ img{
 
 .healthBarBack{
 	position: absolute;
-	width: 13px;
+	width: 14px;
 	height: 2px;
-	left: 0px;
+	left: 1px;
 	top: 14px;
 	background-color: dimgray;
 }
@@ -57,15 +57,15 @@ img{
 .healthBarFront{
 	position: absolute;
 	height: 2px;
-	left: 0px;
+	left: 1px;
 	top: 14px;
 }
 
 .healthBarBorder{
 	position: absolute;
-	width: 12px;
+	width: 13px;
 	height: 1px;
-	left: 0px;
+	left: 1px;
 	top: 14px;
 	border: 1px solid black;
 }
@@ -201,11 +201,11 @@ img{
 .italicText{ font-style: italic; }
 .whiteText{ color: white; }
 .blackText{ color: #000000;}
-.lightGrayText{ color: #6D4E86; }
+.lightGrayText{ color: #8cac49; }
 .droppableText{ color: rgb(214, 0, 54);}
 
 .colorBoxBackground{ background-color: #6e9348 ; }
-.colorDragBar{ background-color: #202d12; }
+.colorDragBar{ background-color: #111b05; }
 .colorItemDark{ background-color: #98b951; }
 .colorItemLight{ background-color: #c8e487; }
 .colorSecondaryDark{ background-color: #202d12; }
