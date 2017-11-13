@@ -71,7 +71,6 @@ table{
 
 .inventoryRow:hover{
     background-color: #efefef;
-    cursor: pointer;
 }
 
 .itemStats{

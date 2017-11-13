@@ -1,5 +1,5 @@
 app.service('ConvoyDataService', ['$rootScope', function($rootScope) {
-    const sheetId = '1Y9xK4Dr02jSW_b_7pT6Cc25_qSwS2I6eeafECd2lu7k';
+    const sheetId = '1Y5-oXfdmcHlXrUeQRAF1vL8nyPwy3QzopY1rVaTPvbU';
     var inventory;
 
     this.getItems = function() {
@@ -10,7 +10,7 @@ app.service('ConvoyDataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Convoy!A2:M',
+            range: 'Convoy!B2:Z',
         }).then(function(response) {
             var items = response.result.values;
             inventory = [];
@@ -21,18 +21,21 @@ app.service('ConvoyDataService', ['$rootScope', function($rootScope) {
 
                 inventory.push({
                     'name': c[0],
-                    'type': c[1],
-                    'rank': c[3],
-                    'might': parseInt(c[4]) | 0,
-                    'hit': parseInt(c[5]) | 0,
-                    'crit': parseInt(c[6]) | 0,
-                    'crit%': parseInt(c[7]) | 0,
-                    'critMod': parseInt(c[8]) | 0,
-                    'avo': c[9],
-                    'cEva': c[10],
-                    'range': c[11],
-                    'rangeVal': parseInt(c[11].substring(c[11].lastIndexOf("~")+1).trim()) | 0,
-                    'desc': c[12] != undefined ? c[12] : ""
+                    'owner': c[1],
+                    'uses': parseInt(c[2]) | 0,
+                    'category' : c[3],
+                    'rank' : c[4] != "-" ? c[4] : "",
+                    'type' : c[5] != "-" ? c[5] : "",
+                    'might': parseInt(c[6]) | 0,
+                    'hit': parseInt(c[7]) | 0,
+                    'crit': parseInt(c[8]) | 0,
+                    'grd': parseInt(c[9]) | 0,
+                    'avo': parseInt(c[10]) | 0,
+                    'range': c[14],
+                    'rangeVal': parseInt(c[14].substring(c[14].lastIndexOf("-")+1).trim()) | 0,
+                    'effect': c[15],
+                    'desc' : c[16],
+                    'value' : parseInt(c[24]) | 0
                 })
             }
 

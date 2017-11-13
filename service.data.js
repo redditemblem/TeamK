@@ -428,7 +428,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
             char.Hit = Math.floor(calculateHit(char.TrueSkl, char.equippedWeapon.hit));
             char.Crit = Math.floor(calculateCrit(char.TrueSkl));
-            char.Avo = Math.floor(calculateAvo(char.TrueSpd,  terrainIndex[terrainLocs[char.position].type].avo));
+            if(char.position.indexOf(",") != -1) char.Avo = Math.floor(calculateAvo(char.TrueSpd,  terrainIndex[terrainLocs[char.position].type].avo));
+            else char.Avo = Math.floor(calculateAvo(char.TrueSpd, 0));
             
             if (terrainLocs[characters[c].position] != undefined)
                 terrainLocs[characters[c].position].occupiedAffiliation = characters[c].affiliation;

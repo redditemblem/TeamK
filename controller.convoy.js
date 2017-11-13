@@ -27,10 +27,11 @@ app.controller('ConvoyCtrl', ['$scope', 'ConvoyDataService', function($scope, Co
         'Lance': '#8290ff',
         'Axe': '#5eba60',
         'Bow': '#fccc7e',
-        'Knife': '#fafc7e',
-        'Tome': '#fc7eaa',
-        'Stone': '#6c5372',
-        'Staff': '#ceebed'
+        'Rhyme' : '#ce42f4',
+        'Wand' : '#ce42f4',
+        'Poppet' : '#ce42f4',
+        'Wonder' : '#ce42f4',
+        'Natural' : '#ce42f4'
     }
 
     //Filter settings
@@ -39,10 +40,11 @@ app.controller('ConvoyCtrl', ['$scope', 'ConvoyDataService', function($scope, Co
     $scope.showLance = true;
     $scope.showAxe = true;
     $scope.showBow = true;
-    $scope.showKnife = true;
-    $scope.showTome = true;
-    $scope.showStone = true;
-    $scope.showStaff = true;
+    $scope.showRhyme = true;
+    $scope.showWand = true;
+    $scope.showPoppet = true;
+    $scope.showWonder = true;
+    $scope.showNatural = true;
     $scope.showOther = true;
 
     $scope.getItemSortOrder = function() {
@@ -50,7 +52,7 @@ app.controller('ConvoyCtrl', ['$scope', 'ConvoyDataService', function($scope, Co
     };
 
     $scope.displayItemType = function(type) {
-        if (type == "None" || type == "Trophy" || type == "Consumable" || type == "Item") return $scope.showOther;
+        if ($scope["show" + type] == undefined) return $scope.showOther;
         return $scope["show" + type] == true;
     };
 
@@ -65,8 +67,8 @@ app.controller('ConvoyCtrl', ['$scope', 'ConvoyDataService', function($scope, Co
     };
 
     $scope.allChecked = function() {
-        return $scope.showSword && $scope.showLance && $scope.showAxe && $scope.showBow && $scope.showKnife &&
-            $scope.showTome && $scope.showStone && $scope.showStaff && $scope.showOther;
+        return $scope.showSword && $scope.showLance && $scope.showAxe && $scope.showBow && $scope.showRhyme &&
+            $scope.showWand && $scope.showPoppet && $scope.showWonder && $scope.showNatural && $scope.showOther;
     };
 
     $scope.setAllCheckboxes = function() {
@@ -75,15 +77,12 @@ app.controller('ConvoyCtrl', ['$scope', 'ConvoyDataService', function($scope, Co
         $scope.showLance = val;
         $scope.showAxe = val;
         $scope.showBow = val;
-        $scope.showKnife = val;
-        $scope.showTome = val;
-        $scope.showStone = val;
-        $scope.showStaff = val;
+        $scope.showRhyme = val;
+        $scope.showWand = val;
+        $scope.showPoppet = val;
+        $scope.showWonder = val;
+        $scope.showNatural = val;
         $scope.showOther = val;
-    };
-
-    $scope.hasUses = function(type) {
-        return type == "Item" || type == "Trophy" || type == "Staff";
     };
 
     $scope.closeConvoy = function() {
