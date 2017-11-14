@@ -26,12 +26,12 @@ app.controller('ConvoyCtrl', ['$scope', 'ConvoyDataService', function($scope, Co
         'Sword': '#ff8282',
         'Lance': '#8290ff',
         'Axe': '#5eba60',
-        'Bow': '#fccc7e',
-        'Rhyme' : '#ce42f4',
-        'Wand' : '#ce42f4',
-        'Poppet' : '#ce42f4',
-        'Wonder' : '#ce42f4',
-        'Natural' : '#ce42f4'
+        'Bow': '#efdf4a',
+        'Rhyme' : '#d666bc',
+        'Wand' : '#5bb28f',
+        'Poppet' : '#eaad52',
+        'Wonder' : '#a04dc1',
+        'Natural' : '#878787'
     }
 
     //Filter settings

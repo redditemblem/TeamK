@@ -29,7 +29,7 @@
     height: 500px;
     width: 1000px;
     margin:0 auto;
-    background-color: #f2f2f2;
+    background-color: #6e9348;
     box-shadow: 1px 1px 30px black;
     font-family: "Verdana";
     padding: 15px;
@@ -53,7 +53,7 @@ table{
     font-weight: bold;
     width: calc(100% - 17px);
     color: white;
-    background-color: #191919;
+    background-color: #111b05;
     top: 5px;
     height: 25px;
 }
@@ -66,7 +66,7 @@ table{
 
 .inventoryRow{
     height: 30px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #111b05;
 }
 
 .inventoryRow:hover{
@@ -105,7 +105,8 @@ table{
     display: inline-block;
     height: 12px;
     width: 12px;
-    border: 2px solid #474747;
+    border: 2px solid #111b05;
+    background-color: white;
     border-radius: 5px;
 }
 
@@ -117,7 +118,7 @@ table{
     position: relative;
     font-size: 18px;
     font-weight: bold;
-    color: purple;
+    color: rgb(207, 49, 78);
     right: 1px;
     bottom: 6px;
 }
@@ -132,12 +133,12 @@ table{
     border-radius: 5px;
  	border: 0px;
  	box-shadow: none;
- 	background-color: gray;
+ 	background-color: #98b951;
  	color: white;
 }
 
 .showAllButton:hover{
-    background-color: #474747;
+    background-color: #9acd32;
 	cursor: pointer;
 }
 
@@ -147,12 +148,12 @@ table{
     border-radius: 5px;
  	border: 0px;
  	box-shadow: none;
- 	background-color: gray;
+ 	background-color: #98b951;
  	color: white;
 }
 
 .sortButton:hover{
-    background-color: #474747;
+    background-color: #9acd32;
 	cursor: pointer;
 }
 
@@ -162,15 +163,15 @@ table{
     border-radius: 5px;
  	border: 0px;
  	box-shadow: none;
- 	background-color: gray;
+ 	background-color: #98b951;
  	color: white;
 }
 
 .shopSortButton:hover{
-    background-color: #474747;
+    background-color: #9acd32;
 	cursor: pointer;
 }
 
 .red{
-    background-color: purple;
+    background-color: gold;
 }

@@ -1,5 +1,5 @@
 app.service('ShopDataService', ['$rootScope', function($rootScope) {
-    const sheetId = '1Y9xK4Dr02jSW_b_7pT6Cc25_qSwS2I6eeafECd2lu7k';
+    const sheetId = '1Y5-oXfdmcHlXrUeQRAF1vL8nyPwy3QzopY1rVaTPvbU';
     var inventory;
 
     this.getItems = function() {
@@ -10,7 +10,7 @@ app.service('ShopDataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Shop Things!A2:O',
+            range: 'Shop!B2:Y',
         }).then(function(response) {
             var items = response.result.values;
             inventory = [];
@@ -21,20 +21,20 @@ app.service('ShopDataService', ['$rootScope', function($rootScope) {
 
                 inventory.push({
                     'name': c[0],
-                    'stock': c[1] == "∞" ? 99 : (parseInt(c[1]) | 0),
-                    'cost': parseInt(c[2]) | 0,
-                    'type': c[3],
-                    'rank': c[5],
-                    'might': parseInt(c[6]) | 0,
-                    'hit': parseInt(c[7]) | 0,
-                    'crit': parseInt(c[8]) | 0,
-                    'crit%': parseFloat(c[9]) | 0,
-                    'critMod': parseInt(c[10]) | 0,
-                    'avo': c[11],
-                    'cEva': c[12],
+                    'stock': parseInt(c[1]) | 0,
+                    'category': c[2],
+                    'rank' : c[3] != "-" ? c[3] : "",
+                    'type': c[4] != "-" ? c[4] : "",
+                    'might': parseInt(c[5]) | 0,
+                    'hit': parseInt(c[6]) | 0,
+                    'crit': parseInt(c[7]) | 0,
+                    'grd': parseInt(c[8]) | 0,
+                    'avo': parseInt(c[9]) | 0,
                     'range': c[13],
-                    'rangeVal': parseInt(c[13].substring(c[13].lastIndexOf("~")+1).trim()) | 0,
-                    'desc': c[14] != undefined ? c[14] : ""
+                    'rangeVal': parseInt(c[13].substring(c[13].lastIndexOf("-")+1).trim()) | 0,
+                    'effect' : c[14],
+                    'desc': c[15],
+                    'cost' : parseInt(c[23]) | 0
                 })
             }
 

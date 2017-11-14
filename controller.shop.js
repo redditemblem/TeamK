@@ -26,11 +26,12 @@ app.controller('ShopCtrl', ['$scope', 'ShopDataService', function($scope, ShopDa
         'Sword': '#ff8282',
         'Lance': '#8290ff',
         'Axe': '#5eba60',
-        'Bow': '#fccc7e',
-        'Knife': '#fafc7e',
-        'Tome': '#fc7eaa',
-        'Stone': '#6c5372',
-        'Staff': '#ceebed'
+        'Bow': '#efdf4a',
+        'Rhyme' : '#d666bc',
+        'Wand' : '#5bb28f',
+        'Poppet' : '#eaad52',
+        'Wonder' : '#a04dc1',
+        'Natural' : '#878787'
     }
 
     //Filter settings
@@ -39,10 +40,11 @@ app.controller('ShopCtrl', ['$scope', 'ShopDataService', function($scope, ShopDa
     $scope.showLance = true;
     $scope.showAxe = true;
     $scope.showBow = true;
-    $scope.showKnife = true;
-    $scope.showTome = true;
-    $scope.showStone = true;
-    $scope.showStaff = true;
+    $scope.showRhyme = true;
+    $scope.showWand = true;
+    $scope.showPoppet = true;
+    $scope.showWonder = true;
+    $scope.showNatural = true;
     $scope.showOther = true;
 
     $scope.getItemSortOrder = function() {
@@ -50,8 +52,8 @@ app.controller('ShopCtrl', ['$scope', 'ShopDataService', function($scope, ShopDa
     };
 
     $scope.displayItemType = function(type) {
-        if (type == "None" || type == "Trophy" || type == "Consumable" || type == "Item") return $scope.showOther;
-        return $scope["show" + type] == true;
+        if ($scope["show" + type] == undefined) return $scope.showOther;
+        else return $scope["show" + type] == true;
     };
 
     $scope.updateSortOrder = function(newOrder) {
@@ -65,8 +67,8 @@ app.controller('ShopCtrl', ['$scope', 'ShopDataService', function($scope, ShopDa
     };
 
     $scope.allChecked = function() {
-        return $scope.showSword && $scope.showLance && $scope.showAxe && $scope.showBow && $scope.showKnife &&
-            $scope.showTome && $scope.showStone && $scope.showStaff && $scope.showOther;
+        return $scope.showSword && $scope.showLance && $scope.showAxe && $scope.showBow && $scope.showRhyme &&
+            $scope.showWand && $scope.showPoppet && $scope.showWonder && $scope.showNatural && $scope.showOther;
     };
 
     $scope.setAllCheckboxes = function() {
@@ -74,16 +76,13 @@ app.controller('ShopCtrl', ['$scope', 'ShopDataService', function($scope, ShopDa
         $scope.showSword = val;
         $scope.showLance = val;
         $scope.showAxe = val;
-        $scope.showTome = val;
         $scope.showBow = val;
-        $scope.showKnife = val;
-        $scope.showStone = val;
-        $scope.showStaff = val;
+        $scope.showRhyme = val;
+        $scope.showWand = val;
+        $scope.showPoppet = val;
+        $scope.showWonder = val;
+        $scope.showNatural = val;
         $scope.showOther = val;
-    };
-
-    $scope.hasUses = function(type) {
-        return type == "Item" || type == "Staff";
     };
 
     $scope.closeShop = function() {
