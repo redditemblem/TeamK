@@ -184,7 +184,7 @@ img{
 	width: 150px; 
 	height: 20px;
 	bottom: 15px;
-	right: 215px;
+	left: -500px;
 	
  	border: 0px;
  	box-shadow: none;
@@ -193,6 +193,14 @@ img{
  	font-family: "Verdana";
 	font-size:10px;
 	cursor: pointer;
+}
+
+.musicPlayer{
+	position: relative;
+	top: -3px;
+	left: -500px;
+	height: 20px;
+	width: 325px;
 }
 
 .centerText{ text-align: center; }

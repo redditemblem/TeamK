@@ -3,6 +3,9 @@
 	<img id="map" src="{{mapUrl}}" style="display: block;" />
 	<div style="display: block; height: 118px;">
 		<img ng-src="IMG/time_out.png" />
+		<audio id="musicPlayer" class="musicPlayer" controls controlsList="nodownload">
+			<source src="MUS/sample.mp3" type="audio/mpeg" />
+		</audio>
 		<button class="buttonGridStyle" ng-click="toggleGrid()">
 				Grid Style: 
 				<span ng-if="showGrid==0"> None</span>
@@ -177,6 +180,7 @@
 					<span ng-if="char.equippedWeapon[stat[0]+'Eqpt'] != 0">{{char.equippedWeapon.name}}: {{char.equippedWeapon[stat[0]+'Eqpt']}}<br /></span>
 					<span ng-if="char[stat[0]+'Buff'] != 0">Buff/Debuff: {{char[stat[0]+'Buff']}}<br /></span>
 					<span ng-if="char[stat[0]+'Boost'] != 0">Boost: {{char[stat[0]+'Boost']}}<br /></span>
+					<span ng-if="char.paired == true && (stat[0] == 'Skl' || stat[0] == 'Spd')">Rescue: -{{char['Orig'+stat[0]] - char['True'+stat[0]]}}<br /></span>
 				</div>
 			</div>
 		</div>

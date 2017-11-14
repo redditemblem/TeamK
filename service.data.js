@@ -421,6 +421,16 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         for (var c in characters){
             var char = characters[c];
 
+            //Check if unit is paired
+            if(char.position.indexOf(",") != -1 && isRescuing(char.name)){
+                char.OrigSkl = char.TrueSkl;
+                char.OrigSpd = char.TrueSpd;
+                char.TrueSkl = Math.floor(char.TrueSkl / 2);
+                char.TrueSpd = Math.floor(char.TrueSpd / 2);
+                char.paired = true;
+            }
+            else{ char.paired = false; }
+
             //Calculate battle stats
             if(char.equippedWeapon.atkStat == "Physical") char.Atk = Math.floor(calculateAtk(char.TrueStr, char.equippedWeapon.might));
             else if(char.equippedWeapon.atkStat == "Magical") char.Atk = Math.floor(calculateAtk(char.TrueMag, char.equippedWeapon.might));
@@ -439,6 +449,13 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         calculateCharacterRanges();
     };
 
+    function isRescuing(name){
+        for(var p in characters)
+        if(characters[p].position == name)
+            return true;
+        return false;
+    };
+
     function getDefaultTerrainObj() {
         return {
             'type': "Plains",
@@ -448,6 +465,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             'occupiedAffiliation': ''
         }
     };
+
     function calculateCharacterRanges() {
 		for(var c in characters){
 			var char = characters[c];
