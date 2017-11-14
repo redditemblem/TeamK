@@ -324,7 +324,6 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	};
 
 	$scope.fetchWeaknessIcon = function(weak){
-		weak = weak.toLowerCase();
 		return `IMG/WEAK/${weak}.png`;
 	};
 
