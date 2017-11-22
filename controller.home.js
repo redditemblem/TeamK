@@ -16,11 +16,11 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	               ];
 	$scope.statsList = [
 	                ["Str", "Strength. Affects damage the unit deals with physical attacks.",    "5px"],
-	                ["Mag", "Magic. Affects damage the unit deals with magical attacks.",        "32px"],
-	                ["Skl", "Skill. Affects hit rate and the frequency of critical hits.",       "59px"],
-	                ["Spd", "Speed. Affects Avo. Unit strikes twice if 5 higher than opponent.", "86px"],
-	                ["Def", "Defense. Reduces damage from physical attacks.",                    "113px"],
-	                ["Res", "Resistance. Reduces damage from physical attacks.",                 "140px"]
+	                ["Mag", "Magic. Affects damage the unit deals with magical attacks.",        "35px"],
+	                ["Skl", "Skill. Affects hit rate and the frequency of critical hits.",       "65px"],
+	                ["Spd", "Speed. Affects Avo. Unit strikes twice if 5 higher than opponent.", "95px"],
+	                ["Def", "Defense. Reduces damage from physical attacks.",                    "125px"],
+	                ["Res", "Resistance. Reduces damage from physical attacks.",                 "155px"]
 	               ];
 	
 	//Interval timers
@@ -28,7 +28,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     
     //Positioning constants
     const weaponVerticalPos = ["59px", "86px", "113px", "140px", "167px"];
-	const weaponRankHorzPos = ["125px", "175px"];
+	const weaponRankHorzPos = ["130px", "185px"];
     const weaponDescVerticalPos = ["35px", "50px", "65px", "80px", "95px"];
     const skillVerticalPos = ["5px", "32px", "59px", "86px", "113px", "140px", "167px"];
     const skillDescVerticalPos = ["5px", "20px", "35px", "50px", "65px", "80px", "95px"];

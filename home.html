@@ -4,7 +4,7 @@
 	<div style="display: block; height: 118px;">
 		<img ng-src="IMG/time_out.png" />
 		<audio id="musicPlayer" class="musicPlayer" controls controlsList="nodownload">
-			<source src="MUS/sample.mp3" type="audio/mpeg" />
+			<source src="MUS/Chapter1Theme.mp3" type="audio/mpeg" />
 		</audio>
 		<button class="buttonGridStyle" ng-click="toggleGrid()">
 				Grid Style: 
@@ -160,7 +160,7 @@
 		</div>
 		<!--Terrain-->
 		<div class="infoElement colorSecondaryDark colorSecondaryDarkHover whiteText terrainBox" ng-mouseover="terrainHoverIn(cIndex)" ng-mouseleave="terrainHoverOut(cIndex)">
-			{{terrainLocs[char.position].type}}
+			{{terrainLocs[char.position].type.length > 0 ? terrainLocs[char.position].type : "No Terrain"}}
 		</div>
 		<!--Name Info Box-->
 		<div ng-if="nameHoverOn(cIndex)" class="infoElement colorHoverBox whiteText nameInfoPos">
@@ -275,7 +275,7 @@
 		</div>
 		<!--Terrain Info Box-->
 		<div ng-if="terrainHoverOn(cIndex)" class="infoElement colorHoverBox whiteText terrainInfoPos">
-			<div class="popOutText popOutHeader">
+			<div class="popOutText popOutHeader" ng-if="terrainLocs[char.position].type.length > 0">
 				<div class="boldText">{{terrainLocs[char.position].type}} Tile</div>
 				<div class="italicText">{{terrainTypes[terrainLocs[char.position].type].avo}} Avo, {{terrainTypes[terrainLocs[char.position].type].def}} Def, {{terrainTypes[terrainLocs[char.position].type].heal}}% Healing</div>
 				<div style="margin-top: 5px;">{{terrainTypes[terrainLocs[char.position].type].effect}}<br/>{{terrainTypes[terrainLocs[char.position].type].desc}}</div>

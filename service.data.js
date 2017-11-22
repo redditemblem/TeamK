@@ -310,12 +310,12 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'MovBoost' : c[54].length > 0 ? parseInt(c[54]) : 0,
                 'weaponRanks' : {
                     'wpn1' : {
-                        'class' : c[55],
+                        'class' : c[55] != "-" ? c[55] : "",
                         'exp' : calculateExpPercent(c[56]),
                         'rank' : calculateWpnRank(c[56])
                     },
                     'wpn2' : {
-                        'class' : c[57],
+                        'class' : c[57] != "-" ? c[57] : "",
                         'exp' : calculateExpPercent(c[58]),
                         'rank' : calculateWpnRank(c[58])
                     }
