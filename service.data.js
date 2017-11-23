@@ -29,7 +29,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "COLUMNS",
-            range: 'Unit Tracker!B1:AZ',
+            range: 'Unit Tracker!B1:ZZ',
         }).then(function(response) {
             characterData = response.result.values;
             updateProgressBar();
