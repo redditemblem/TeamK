@@ -218,7 +218,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Terrain Chart!A2:L',
+            range: 'Terrain Chart!A2:N',
         }).then(function(response) {
             var rows = response.result.values;
             terrainIndex = {};
@@ -238,7 +238,10 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                     'Mage' : r[8],
                     'Flier' : r[9],
                     'effect' : r[10] != undefined ? r[10] : "",
-                    'desc': r[11] !=  undefined ? r[11] : ""
+                    'desc': r[11] !=  undefined ? r[11] : "",
+                    'waterWalker' : r[12] == "Water Walker",
+                    'rockClimber' : r[12] == "Rock Climber",
+                    'skillParam' : r[13] != undefined ? r[13] :""
                 }
             }
 
@@ -506,13 +509,15 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                     }
                 }
 
+                var hasWaterWalker = false;
+                var hasRockClimber = false;
                 var hasHover = false;
 
 				for(var s in char.skills){
 					var skl = char.skills[s];
 					switch(skl.name){
-                        case "Water Walker" : break;
-                        case "Mountain Climber" : break;
+                        case "Water Walker" : hasWaterWalker = true; break;
+                        case "Rock Climber" : hasRockClimber = true; break;
                         case "Hover" : hasHover = true; break;
                         case "Wondrous" : if(isWonder) maxHealRange += 1; break;
                         case "Phantom Edge" : if(maxAtkRange == 1) maxAtkRange = 2; break;
@@ -524,6 +529,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 					'healRange' : maxHealRange,
 					'terrainClass' : char.class.terrainType,
                     'affiliation' : char.affiliation,
+                    'hasWaterWalker' : hasWaterWalker,
+                    'hasRockClimber' : hasRockClimber,
                     'hasHover' : hasHover
 				};
 
@@ -561,7 +568,11 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 			var classCost = terrainIndex[tile.type][params.terrainClass];
 			if(classCost == undefined) return;
 
-            classCost = parseFloat(classCost) || 99;
+            if((params.hasWaterWalker && terrainIndex[tile.type].waterWalker) ||
+               (params.hasRockClimber && terrainIndex[tile.type].rockClimber)) 
+                    classCost = parseFloat(terrainIndex[tile.type].skillParam) || 99;
+            else if(params.hasHover && classCost != "-") classCost = 1;
+            else classCost = parseFloat(classCost) || 99;
             
             //Determine traversal cost
 			if(  classCost == 99
