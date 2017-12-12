@@ -412,6 +412,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         for (var r = 0; r < rows.length; r++)
             for (var c = 0; c < cols.length; c++)
                 terrainLocs[cols[c] + "," + rows[r]] = getDefaultTerrainObj();
+        terrainLocs["-1,-1"] = getDefaultTerrainObj();
 
         //Update terrain types from input list
         for (var r = 0; r < coordMapping.length; r++) {
@@ -461,7 +462,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
     function getDefaultTerrainObj() {
         return {
-            'type': "Plains",
+            'type': "Plain",
             'movCount': 0,
             'atkCount': 0,
             'healCount': 0,
@@ -477,7 +478,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 			var healList = [];
 		
 			var pos = char.position;
-			if (pos.length > 0 && pos.indexOf(",") != -1 && pos != "Not Deployed" && pos != "Defeated") {
+			if (pos.length > 0 && pos.indexOf(",") != -1 && pos != "-1,-1" && pos != "Not Deployed" && pos != "Defeated") {
 				var horz = cols.indexOf(pos.substring(0,pos.indexOf(",")));
 				var vert = rows.indexOf(pos.substring(pos.indexOf(",")+1));
 				var range = parseInt(char.Mov);
