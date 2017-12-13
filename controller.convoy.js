@@ -53,6 +53,7 @@ app.controller('ConvoyCtrl', ['$scope', 'ConvoyDataService', function($scope, Co
 
     $scope.displayItemType = function(type) {
         if ($scope["show" + type] == undefined) return $scope.showOther;
+        else if(type == "Wing" || type == "Fin" || type == "Claw") return $scope.showNatural;
         return $scope["show" + type] == true;
     };
 

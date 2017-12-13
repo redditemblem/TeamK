@@ -53,6 +53,7 @@ app.controller('ShopCtrl', ['$scope', 'ShopDataService', function($scope, ShopDa
 
     $scope.displayItemType = function(type) {
         if ($scope["show" + type] == undefined) return $scope.showOther;
+        else if(type == "Wing" || type == "Fin" || type == "Claw") return $scope.showNatural;
         else return $scope["show" + type] == true;
     };
 

@@ -364,6 +364,15 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             currObj.TrueRes = calculateTrueStat(currObj, "Res");
             currObj.TrueMov = calculateTrueStat(currObj, "Mov");
 
+            currObj.maxHp = calculateBaseStat(currObj, "maxHp");
+            currObj.Str = calculateBaseStat(currObj, "Str");
+            currObj.Mag = calculateBaseStat(currObj, "Mag");
+            currObj.Skl = calculateBaseStat(currObj, "Skl");
+            currObj.Spd = calculateBaseStat(currObj, "Spd");
+            currObj.Def = calculateBaseStat(currObj, "Def");
+            currObj.Res = calculateBaseStat(currObj, "Res");
+            currObj.Mov = calculateBaseStat(currObj, "Mov");
+
             currObj.weaknesses = currObj.class.weaknesses.concat(currObj.motif.weaknesses);
 
             characters["char_" + i] = currObj;
@@ -492,8 +501,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                     if(item.isFamiliar) continue; //skip familiars
 
 					var r = formatItemRange(item.range);
-					if (isAttackingItem(item.class) && r > maxAtkRange && r <= 10) maxAtkRange = r;
-                    else if (!isAttackingItem(item.class) && r > maxHealRange && r <= 10){ 
+					if (isAttackingItem(item.class, item.might) && r > maxAtkRange && r <= 10) maxAtkRange = r;
+                    else if (!isAttackingItem(item.class, item.might) && r > maxHealRange && r <= 10){ 
                         if(item.class == "Wonder") isWonder = true;
                         else isWonder = false;
                         maxHealRange = r;
@@ -502,8 +511,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
                 if(char.equippedWeapon.name.length > 0){
                     var eR = formatItemRange(char.equippedWeapon.range);
-                    if (isAttackingItem(char.equippedWeapon.class) && eR > maxAtkRange && r <= 10) maxAtkRange = eR;
-                    else if (!isAttackingItem(char.equippedWeapon.class) && eR > maxHealRange && r <= 10){ 
+                    if (isAttackingItem(char.equippedWeapon.class, char.equippedWeapon.might) && eR > maxAtkRange && r <= 10) maxAtkRange = eR;
+                    else if (!isAttackingItem(char.equippedWeapon.class, char.equippedWeapon.might) && eR > maxHealRange && r <= 10){ 
                         if(char.equippedWeapon.class == "Wonder") isWonder = true;
                         else isWonder = false;
                         maxHealRange = eR;
@@ -641,9 +650,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         return parseInt(range) | 0;
     };
 
-    function isAttackingItem(wpnClass, critDmg) {
-        if(wpnClass == "Staff")
-            return critDmg != 0;
+    function isAttackingItem(wpnClass, might) {
+        if(wpnClass == "Wonder") return might != 0;
         else return wpnClass != "Item" && wpnClass != "Trophy" && wpnClass != "Mystery";
     };
 
@@ -776,8 +784,12 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     //\\//\\//\\//\\//\\//
 
     function calculateTrueStat(char, stat){
-        return char[stat] + char[stat+"Buff"] + char[stat+"Boost"] + (char.equippedWeapon[stat+"Eqpt"] != undefined ? char.equippedWeapon[stat+"Eqpt"] : 0);
+        return char[stat] + (char.equippedWeapon[stat+"Eqpt"] != undefined ? char.equippedWeapon[stat+"Eqpt"] : 0);
     };
+
+    function calculateBaseStat(char, stat){
+        return char[stat] - char[stat+"Buff"] - char[stat+"Boost"];
+    }
 
     function calculateAtk(strMag, wpnMight){
         return strMag + wpnMight;

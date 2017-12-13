@@ -292,7 +292,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	};
 
 	$scope.setItemDescHeight = function(type){
-		if(type != "Item" && type != "Consumable" && type != "Wonder" && type != "Mystery") return "70px";
+		if(type != "Item" && type != "Consumable" && type != "Mystery") return "70px";
     	else return "108px";
 	};
  
@@ -387,11 +387,11 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     };
     
     $scope.notItem = function(type){
-    	return type != "Wonder" && type != "Consumable" && type != "Item" && type != "Mystery";
+    	return type != "Consumable" && type != "Item" && type != "Mystery";
     };
     
     $scope.setDescriptionLoc = function(type){
-    	if(type != "Wonder" && type != "Consumable" && type != "Item" && type != "Mystery") return "60px";
+    	if(type != "Consumable" && type != "Item" && type != "Mystery") return "60px";
     	else return "25px";
     };
 
