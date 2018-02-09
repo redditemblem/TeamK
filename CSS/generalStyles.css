@@ -70,6 +70,23 @@ img{
 	border: 1px solid black;
 }
 
+.statusIcon{
+	position: absolute;
+	top: -2px;
+	left: -1px;
+	height: 7px;
+	width: 7px;
+}
+
+.statusBar{
+	position: relative;
+	top: 1px;
+	margin-left: 1px;
+	height: 1px;
+	width: 5px;
+	background-color: white;
+}
+
 .infoElement{
 	position: absolute;
 	border-radius: 10px;

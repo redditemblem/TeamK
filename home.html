@@ -61,6 +61,10 @@
 				<div class="healthBarFront" ng-style="{width: getHPPercent(char.currHp, char.maxHp), 'background-color': determineHPBackgroundColor(char.currHp, char.maxHp)}"></div>
 				<div class="healthBarBorder"></div>
 			</div>
+			<div class="statusIcon" ng-if="char.statuses.length > 0">
+				<div ng-repeat="i in [0,1,2,3,4]" class="statusBar" ng-style="{'background-color': getStatusBarColor(char.statuses, i)}"></div>
+				<img src="IMG/statusoutline.png" class="absolutePos" style="left: 0px; top: 0px;" />
+			</div>
 			<img ng-src="{{getEnemyNum(char.name)}}" class="enemyNum" />
 			<img ng-if="char.tags.indexOf('Boss')!=-1" class="pairUpIcon" src="IMG/shield_boss.png" />
 			<img ng-if="isPaired(cIndex)" class="pairUpIcon" src="IMG/shield_pairup.png" />
@@ -180,7 +184,7 @@
 					<span ng-if="char.equippedWeapon[stat[0]+'Eqpt'] != 0">{{char.equippedWeapon.name}}: {{char.equippedWeapon[stat[0]+'Eqpt']}}<br /></span>
 					<span ng-if="char[stat[0]+'Buff'] != 0">Buff/Debuff: {{char[stat[0]+'Buff']}}<br /></span>
 					<span ng-if="char[stat[0]+'Boost'] != 0">Boost: {{char[stat[0]+'Boost']}}<br /></span>
-					<span ng-if="char.paired == true && (stat[0] == 'Skl' || stat[0] == 'Spd')">Rescue: -{{char['Orig'+stat[0]] - char['True'+stat[0]]}}<br /></span>
+					<span ng-if="char.paired == true && char.hasRescue == false && (stat[0] == 'Skl' || stat[0] == 'Spd')">Rescue: -{{char['Orig'+stat[0]] - char['True'+stat[0]]}}<br /></span>
 				</div>
 			</div>
 		</div>

@@ -346,8 +346,13 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             }
 
             //Skills
+            currObj.hasRescuer = false;
             for (var k = 26; k < 33; k++)
+            {
                 currObj.skills["skl" + (k - 25)] = getSkill(c[k]);
+                if(currObj.skills["skl" + (k - 25)].name == "Rescuer")
+                    currObj.hasRescuer = true;
+            }
 
             //Statuses
             for(var l = 34; l < 39; l++)
@@ -436,11 +441,15 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
             //Check if unit is paired
             if(char.position.indexOf(",") != -1 && isRescuing(char.name)){
-                char.OrigSkl = char.TrueSkl;
-                char.OrigSpd = char.TrueSpd;
-                char.TrueSkl = Math.floor(char.TrueSkl / 2);
-                char.TrueSpd = Math.floor(char.TrueSpd / 2);
                 char.paired = true;
+
+                if(char.hasRescuer == false)
+                {
+                    char.OrigSkl = char.TrueSkl;
+                    char.OrigSpd = char.TrueSpd;
+                    char.TrueSkl = Math.floor(char.TrueSkl / 2);
+                    char.TrueSpd = Math.floor(char.TrueSpd / 2);
+                }
             }
             else{ char.paired = false; }
 
@@ -464,8 +473,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
     function isRescuing(name){
         for(var p in characters)
-        if(characters[p].position == name)
-            return true;
+            if(characters[p].position == name)
+                return true;
         return false;
     };
 

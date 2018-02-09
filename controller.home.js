@@ -43,6 +43,11 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	const NAMETAG_GREEN = "#33bb33";
 	const NAMETAG_GREEN2 = "#9ef237";
 	const NAMETAG_PERIWINKLE = "#9988dd";
+
+	const STATUS_POSITIVE = "#0084ff";
+	const STATUS_NEGATIVE = "#ff0000";
+	const STATUS_NEUTRAL = "#9aeaa5";
+	const STATUS_NONE = "#ffffff";
     
     //Reroutes the user if they haven't logged into the app
     //Loads data from the DataService if they have
@@ -410,7 +415,17 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 		if(type.length == 0) return "";
 		else return `IMG/${type}.png`;
 	};
-    
+	
+	$scope.getStatusBarColor = function(statuses, i){
+		if(statuses.length < (i+1)) return STATUS_NONE;
+
+		switch(statuses[i].category.trim()){
+			case "+" : return STATUS_POSITIVE;
+			case "-" : return STATUS_NEGATIVE;
+			default: return STATUS_NEUTRAL;
+		}
+	}
+
     //***************************\\
     // MOUSEOVER/MOUSEOUT EVENTS \\
     //***************************\\
