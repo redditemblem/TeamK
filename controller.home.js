@@ -403,7 +403,8 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	$scope.determineNametagColor = function(aff){
 		switch(aff){
 			case "Alistair's Army" : return NAMETAG_BLUE;
-			case "Crown Army" : return NAMETAG_RED;
+			case "Crown Army" : 
+			case "Bandits" : return NAMETAG_RED;
 			case "Villagers" : return NAMETAG_GREEN2;
 			case "Allies" : return NAMETAG_GREEN;
 			case "Other" : return NAMETAG_PERIWINKLE;

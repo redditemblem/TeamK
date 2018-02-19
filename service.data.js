@@ -1,5 +1,7 @@
 app.service('DataService', ['$rootScope', function($rootScope) {
-    const sheetId = '1fwzq_64mPMmCndomAe7sZeBrhJEhR9S-CJvIitzVrDI';
+    const chapterSheetID = '1fwzq_64mPMmCndomAe7sZeBrhJEhR9S-CJvIitzVrDI';
+    const gaidenSheetID = '1k-AdHWJMDHDqWinboBNtB11ss5A4xihryIAyP5TUhgg';
+    var sheetId = '';
     const updateVal = (100 / 14) + 0.1;
     const boxWidth = 16;
     const gridWidth = 0;
@@ -20,6 +22,20 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
     this.loadMapData = function() { fetchCharacterData(); };
     this.calculateRanges = function() { getMapDimensions(); };
+
+    this.FetchSheetID = function(type){
+        switch(type){
+            case 1 : return chapterSheetID; break;
+            case 2 : return gaidenSheetID; break;
+        }
+    };
+
+    this.SetSheetID = function(type){
+        switch(type){
+            case 1 : sheetId = chapterSheetID; break;
+            case 2 : sheetId = gaidenSheetID; break;
+        }
+    };
 
     //\\//\\//\\//\\//\\//
     // DATA AJAX CALLS  //

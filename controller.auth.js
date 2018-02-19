@@ -1,6 +1,6 @@
 app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', function($scope, $location, $interval, DataService) {
     var id = fetch();
-    var sheetId = '1fwzq_64mPMmCndomAe7sZeBrhJEhR9S-CJvIitzVrDI';
+    var sheetId = '';
     $scope.ready = false;
     var checkGapi = $interval(checkAuth, 250);
     $scope.loadingIcon = pickLoadingIcon();
@@ -43,9 +43,13 @@ app.controller('AuthCtrl', ['$scope', '$location', '$interval', 'DataService', f
             'apiKey': id,
             'discoveryDocs': ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
         }).then(function() {
-            if (type == 2) displayConvoyDialog();
-            else if (type == 3) displayShopDialog();
-            else testWebAppAvailability();
+            if (type == 3) displayConvoyDialog();
+            else if (type == 4) displayShopDialog();
+            else {
+                sheetId = DataService.FetchSheetID(type);
+                DataService.SetSheetID(type);
+                testWebAppAvailability();
+            }
         });
     };
 
