@@ -443,6 +443,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             for (var c = 0; c < cols.length; c++)
                 terrainLocs[cols[c] + "," + rows[r]] = getDefaultTerrainObj();
         terrainLocs["-1,-1"] = getDefaultTerrainObj();
+        terrainLocs["Defeated"] = getDefaultTerrainObj();
+        terrainLocs["Not Deployed"] = getDefaultTerrainObj();
 
         //Update terrain types from input list
         for (var r = 0; r < coordMapping.length; r++) {
