@@ -720,6 +720,13 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     };
 
     function getSkill(name) {
+        var originalName = name;
+        if (name != undefined && name.length > 0) {
+            if (name.indexOf("(") != -1)
+                name = name.substring(0, name.indexOf("("));
+            name = name.trim();
+        }
+
         if (name == undefined || name.length == 0 || skillIndex[name] == undefined)
             return {
                 'name': name != undefined ? name : "",
@@ -727,10 +734,20 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'isCommand' : false,
                 'desc': "This skill could not be located."
             }
-        else return skillIndex[name];
+        
+        var copy = Object.assign({}, skillIndex[name]);
+        copy.name = originalName;
+        return copy;
     };
 
     function getClass(name) {
+        var originalName = name;
+        if (name != undefined && name.length > 0) {
+            if (name.indexOf("(") != -1)
+                name = name.substring(0, name.indexOf("("));
+            name = name.trim();
+        }
+
         if (name == undefined || name.length == 0 || classIndex[name] == undefined)
             return {
                 'name': name != undefined ? name : "Undefined",
@@ -738,26 +755,56 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'desc' : "This class could not be located.",
                 'terrainType' : ""
             }
-        else return classIndex[name];
+
+        var copy = Object.assign({}, classIndex[name]);
+        copy.name = originalName;
+        return copy;
     };
 
     function getMotif(name){
-        if (name == undefined || name.length == 0 || motifIndex[name] == undefined)
-        return {
-            'name': name != undefined ? name : "Undefined",
-            'weaknesses' : [],
-            'desc' : "This motif could not be located."
+        var originalName = name;
+        if (name != undefined && name.length > 0) {
+            if (name.indexOf("(") != -1)
+                name = name.substring(0, name.indexOf("("));
+            name = name.trim();
         }
-        else return motifIndex[name];
+        
+        if (name == undefined || name.length == 0 || motifIndex[name] == undefined)
+            return {
+                'name': name != undefined ? name : "Undefined",
+                'weaknesses' : [],
+                'desc' : "This motif could not be located."
+            }
+
+        var copy = Object.assign({}, motifIndex[name]);
+        copy.name = originalName;
+        return copy;
     };
 
     function getFamiliar(name){
+        var originalName = name;
+        if (name != undefined && name.length > 0) {
+            if (name.indexOf("(") != -1)
+                name = name.substring(0, name.indexOf("("));
+            name = name.trim();
+        }
+
         if (name == undefined || name.length == 0 || familiarIndex[name] == undefined)
             return getDefaultFamiliarObj(name);
-        else return familiarIndex[name];
+        
+        var copy = Object.assign({}, familiarIndex[name]);
+        copy.name = originalName;
+        return copy;
     };
 
     function getStatus(name){
+        var originalName = name;
+        if (name != undefined && name.length > 0) {
+            if (name.indexOf("(") != -1)
+                name = name.substring(0, name.indexOf("("));
+            name = name.trim();
+        }
+
         if (name == undefined || name.length == 0 || statusIndex[name] == undefined)
             return {
                 'name' : name,
@@ -765,7 +812,10 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'duration' : 0,
                 'desc' : "This status could not be located."
             }
-        else return statusIndex[name];
+
+        var copy = Object.assign({}, statusIndex[name]);
+        copy.name = originalName;
+        return copy;
     };
 
     function getDefaultWeaponObj(name){

@@ -280,7 +280,7 @@
 		<!--Terrain Info Box-->
 		<div ng-if="terrainHoverOn(cIndex)" class="infoElement colorHoverBox whiteText terrainInfoPos">
 			<div class="popOutText popOutHeader" ng-if="terrainLocs[char.position].type.length > 0">
-				<div class="boldText">{{terrainLocs[char.position].type}} Tile</div>
+				<div class="boldText">{{terrainLocs[char.position].type}} Tile ({{char.position}})</div>
 				<div class="italicText">{{terrainTypes[terrainLocs[char.position].type].avo}} Avo, {{terrainTypes[terrainLocs[char.position].type].def}} Def, {{terrainTypes[terrainLocs[char.position].type].heal}}% Healing</div>
 				<div style="margin-top: 5px;">{{terrainTypes[terrainLocs[char.position].type].effect}}<br/>{{terrainTypes[terrainLocs[char.position].type].desc}}</div>
 			</div>
