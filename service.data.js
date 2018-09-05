@@ -234,7 +234,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: sheetId,
             majorDimension: "ROWS",
-            range: 'Terrain Chart!A2:N',
+            range: 'Terrain Chart!A2:O',
         }).then(function(response) {
             var rows = response.result.values;
             terrainIndex = {};
@@ -257,7 +257,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                     'desc': r[11] !=  undefined ? r[11] : "",
                     'waterWalker' : r[12] == "Water Walker",
                     'rockClimber' : r[12] == "Rock Climber",
-                    'skillParam' : r[13] != undefined ? r[13] :""
+                    'skillParam' : r[13] != undefined ? r[13] : "",
+                    'canAttack' : r[14] != undefined ? (r[14] == "Yes") : false
                 }
             }
 
@@ -646,8 +647,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 			var coord = cols[horzPos]+","+rows[vertPos];
 			var tile = terrainLocs[coord];
 
-			var classCost = terrainIndex[terrainLocs[coord].type].Flier;
-			if(classCost == undefined || classCost == "-") return;
+			var canAttack = terrainIndex[terrainLocs[coord].type].canAttack;
+			if(!canAttack) return;
 			else range -= 1;
 
 			if(itemList.indexOf(coord) == -1) itemList.push(coord);
