@@ -643,8 +643,9 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     };
     
     function recurseItemRange(horzPos, vertPos, range, list, itemList, trace){
+        var coord = cols[horzPos]+","+rows[vertPos];
+        
 		if(trace.length > 1){
-			var coord = cols[horzPos]+","+rows[vertPos];
 			var tile = terrainLocs[coord];
 
 			var canAttack = terrainIndex[terrainLocs[coord].type].canAttack;
