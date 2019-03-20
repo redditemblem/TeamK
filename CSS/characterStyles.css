@@ -183,6 +183,14 @@
 	left:10px;
 	top:6px;
 	font-size: 10px;
+	max-width: 125px;
+}
+
+.rightSkillCharge{
+	position: absolute;
+	right: 10px;
+	top: 7px;
+	font-size: 9px;
 }
 
 .indentedWeaponName{
@@ -191,7 +199,6 @@
 	top:5px;
 	font-size: 10px;
 }
-
 
 .indentedWeaponIcon{
 	position: absolute;

@@ -28,7 +28,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
     
     //Positioning constants
     const weaponVerticalPos = ["59px", "86px", "113px", "140px", "167px"];
-	const weaponRankHorzPos = ["130px", "185px"];
+	const weaponRankHorzPos = ["130px", "185px", "240px"];
     const weaponDescVerticalPos = ["35px", "50px", "65px", "80px", "95px"];
     const skillVerticalPos = ["5px", "32px", "59px", "86px", "113px", "140px", "167px"];
     const skillDescVerticalPos = ["5px", "20px", "35px", "50px", "65px", "80px", "95px"];

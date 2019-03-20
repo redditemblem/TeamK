@@ -312,38 +312,43 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'familiar' : getFamiliar(c[25]),
                 'skills' : {},
                 'statuses' : [],
-                'maxHpBuff' : c[39].length > 0 ? parseInt(c[39]) : 0,
-                'StrBuff' : c[40].length > 0 ? parseInt(c[40]) : 0,
-                'MagBuff' : c[41].length > 0 ? parseInt(c[41]) : 0,
-                'SklBuff' : c[42].length > 0 ? parseInt(c[42]) : 0,
-                'SpdBuff' : c[43].length > 0 ? parseInt(c[43]) : 0,
-                'DefBuff' : c[44].length > 0 ? parseInt(c[44]) : 0,
-                'ResBuff' : c[45].length > 0 ? parseInt(c[45]) : 0,
-                'MovBuff' : c[46].length > 0 ? parseInt(c[46]) : 0,
-                'maxHpBoost' : c[47].length > 0 ? parseInt(c[47]) : 0,
-                'StrBoost' : c[48].length > 0 ? parseInt(c[48]) : 0,
-                'MagBoost' : c[49].length > 0 ? parseInt(c[49]) : 0,
-                'SklBoost' : c[50].length > 0 ? parseInt(c[50]) : 0,
-                'SpdBoost' : c[51].length > 0 ? parseInt(c[51]) : 0,
-                'DefBoost' : c[52].length > 0 ? parseInt(c[52]) : 0,
-                'ResBoost' : c[53].length > 0 ? parseInt(c[53]) : 0,
-                'MovBoost' : c[54].length > 0 ? parseInt(c[54]) : 0,
+                'maxHpBuff' : c[40].length > 0 ? parseInt(c[40]) : 0,
+                'StrBuff' : c[41].length > 0 ? parseInt(c[41]) : 0,
+                'MagBuff' : c[42].length > 0 ? parseInt(c[42]) : 0,
+                'SklBuff' : c[43].length > 0 ? parseInt(c[43]) : 0,
+                'SpdBuff' : c[44].length > 0 ? parseInt(c[44]) : 0,
+                'DefBuff' : c[45].length > 0 ? parseInt(c[45]) : 0,
+                'ResBuff' : c[46].length > 0 ? parseInt(c[46]) : 0,
+                'MovBuff' : c[47].length > 0 ? parseInt(c[47]) : 0,
+                'maxHpBoost' : c[48].length > 0 ? parseInt(c[48]) : 0,
+                'StrBoost' : c[49].length > 0 ? parseInt(c[49]) : 0,
+                'MagBoost' : c[50].length > 0 ? parseInt(c[50]) : 0,
+                'SklBoost' : c[51].length > 0 ? parseInt(c[51]) : 0,
+                'SpdBoost' : c[52].length > 0 ? parseInt(c[52]) : 0,
+                'DefBoost' : c[53].length > 0 ? parseInt(c[53]) : 0,
+                'ResBoost' : c[54].length > 0 ? parseInt(c[54]) : 0,
+                'MovBoost' : c[55].length > 0 ? parseInt(c[55]) : 0,
                 'weaponRanks' : {
                     'wpn1' : {
-                        'class' : c[55] != "-" ? c[55] : "",
-                        'exp' : calculateExpPercent(c[56]),
-                        'rank' : calculateWpnRank(c[56])
+                        'class' : c[56] != "-" ? c[56] : "",
+                        'exp' : calculateExpPercent(c[57]),
+                        'rank' : calculateWpnRank(c[57])
                     },
                     'wpn2' : {
-                        'class' : c[57] != "-" ? c[57] : "",
-                        'exp' : calculateExpPercent(c[58]),
-                        'rank' : calculateWpnRank(c[58])
+                        'class' : c[58] != "-" ? c[58] : "",
+                        'exp' : calculateExpPercent(c[59]),
+                        'rank' : calculateWpnRank(c[59])
+                    },
+                    'wpn3' : {
+                        'class' : c[60] != "-" ? c[60] : "",
+                        'exp' : calculateExpPercent(c[61]),
+                        'rank' : calculateWpnRank(c[61])
                     }
                 },
-                'mimic' : c[59] != "None" ? c[59] : "",
-                'behavior' : c[60] != undefined ? c[60] : "",
-                'desc' : c[61] != undefined ? c[61] : "",
-                'portrait' : c[62] != undefined ? c[62] : ""
+                'mimic' : c[62] != "None" ? c[62] : "",
+                'behavior' : c[63] != undefined ? c[63] : "",
+                'desc' : c[64] != undefined ? c[64] : "",
+                'portrait' : c[65] != undefined ? c[65] : ""
             };
 
             //Inventory
@@ -371,8 +376,17 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                     currObj.hasRescuer = true;
             }
 
+            //Skill charges
+            for(var m = 33; m < 35; m++)
+            {
+                if(c[m].length == 0) continue;
+
+                var values = c[m].split(",");
+                currObj.skills["skl" + values[0].trim()].charge = values[1].replace(/\s/g, '');
+            }
+
             //Statuses
-            for(var l = 34; l < 39; l++)
+            for(var l = 35; l < 40; l++)
                 if(c[l].length > 0)
                     currObj.statuses.push(getStatus(c[l]));
 

@@ -139,6 +139,7 @@
 		<!--Skills-->
 		<div ng-repeat="skill in char.skills" class="infoElement blackText colorItemLightHover colorItemLight colorItemLightHover skillPos" ng-mouseover="skillHoverIn(cIndex, $index)" ng-mouseleave="skillHoverOut(cIndex, $index)" ng-style="{top: fetchSklVerticalPos($index)}">
 			<span class="indentedSkillName" ng-if="validSkill(skill.name)">{{skill.name}}</span>
+			<span class="rightSkillCharge" ng-if="validSkill(skill.name)">{{skill.charge}}</span>
 		</div>
 		<!--Weaknesses-->
 		<div class="infoElement colorSecondaryLight whiteText weaknessBox">
