@@ -11,8 +11,10 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 	$scope.battleStatsList = [
 	                ["Atk", "130px", "5px"],
 	                ["Hit", "130px", "95px"],
-	                ["Crit", "157px", "5px"],
-	                ["Avo", "157px", "95px"]
+	                ["Crit", "148px", "5px"],
+					["Avo", "148px", "95px"],
+					["Grd", "166px", "5px"],
+					["Eva", "166px", "95px"]
 	               ];
 	$scope.statsList = [
 	                ["Str", "Strength. Affects damage the unit deals with physical attacks.",    "5px"],
@@ -404,7 +406,8 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 		switch(aff){
 			case "Alistair's Army" : return NAMETAG_BLUE;
 			case "Crown Army" : 
-			case "Bandits" : return NAMETAG_RED;
+			case "Bandits" : 
+			case "Lost Heroes" : return NAMETAG_RED;
 			case "Villagers" : return NAMETAG_GREEN2;
 			case "Allies" : return NAMETAG_GREEN;
 			case "Other" : return NAMETAG_PERIWINKLE;

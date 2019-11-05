@@ -115,8 +115,8 @@
 			<span class="indentedStat2">{{char.exp}}</span>
 		</div>
 		<div ng-repeat="stat in battleStatsList" class="infoElement colorSecondaryDark whiteText battleStatBox" ng-style="{top: stat[1], left: stat[2]}">
-			<span class="indentedStatLabel">{{stat[0]}}</span>
-			<span class="indentedStat">{{char[stat[0]]}}</span>
+			<span class="indentedStatLabel2">{{stat[0]}}</span>
+			<span class="indentedStat3">{{char[stat[0]]}}</span>
 		</div>
 		<!--Stats-->
 		<div ng-repeat="stat in statsList" ng-mouseenter="statHoverIn(cIndex, $index)" ng-mouseleave="statHoverOut(cIndex, $index)" class="infoElement colorSecondaryLight colorSecondaryLightHover statBox" ng-style="{top: stat[2]}">

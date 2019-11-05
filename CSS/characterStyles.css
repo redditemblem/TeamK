@@ -85,7 +85,7 @@
 
 .battleStatBox{
 	position: absolute;
-	height: 22px;
+	height: 15px;
 	width: 110px;
 }
 
@@ -158,6 +158,13 @@
 	top:7px;
 }
 
+.indentedStatLabel2{
+	position: absolute;
+	font-size:7px;
+	left:15px;
+	top:3px;
+}
+
 .indentedStat{
 	position: absolute;
 	left:65px;
@@ -170,6 +177,13 @@
 	left:45px;
 	top:3px;
 	font-size: 12px;
+}
+
+.indentedStat3{
+	position: absolute;
+	left:45px;
+	top:1px;
+	font-size: 10px;
 }
 
 .largeIndentedStat{

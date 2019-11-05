@@ -328,27 +328,39 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'DefBoost' : c[53].length > 0 ? parseInt(c[53]) : 0,
                 'ResBoost' : c[54].length > 0 ? parseInt(c[54]) : 0,
                 'MovBoost' : c[55].length > 0 ? parseInt(c[55]) : 0,
+                'AtkBuff' : c[56].length > 0 ? parseInt(c[56]) : 0,
+                'HitBuff' : c[57].length > 0 ? parseInt(c[57]) : 0,
+                'CritBuff' : c[58].length > 0 ? parseInt(c[58]) : 0,
+                'GrdBuff' : c[59].length > 0 ? parseInt(c[59]) : 0,
+                'AvoBuff' : c[60].length > 0 ? parseInt(c[60]) : 0,
+                'EvaBuff' : c[61].length > 0 ? parseInt(c[61]) : 0,
+                'AtkBoost' : c[64].length > 0 ? parseInt(c[64]) : 0,
+                'HitBoost' : c[65].length > 0 ? parseInt(c[65]) : 0,
+                'CritBoost' : c[66].length > 0 ? parseInt(c[66]) : 0,
+                'GrdBoost' : c[67].length > 0 ? parseInt(c[67]) : 0,
+                'AvoBoost' : c[68].length > 0 ? parseInt(c[68]) : 0,
+                'EvaBoost' : c[69].length > 0 ? parseInt(c[69]) : 0,
                 'weaponRanks' : {
                     'wpn1' : {
-                        'class' : c[56] != "-" ? c[56] : "",
-                        'exp' : calculateExpPercent(c[57]),
-                        'rank' : calculateWpnRank(c[57])
+                        'class' : c[72] != "-" ? c[72] : "",
+                        'exp' : calculateExpPercent(c[73]),
+                        'rank' : calculateWpnRank(c[73])
                     },
                     'wpn2' : {
-                        'class' : c[58] != "-" ? c[58] : "",
-                        'exp' : calculateExpPercent(c[59]),
-                        'rank' : calculateWpnRank(c[59])
+                        'class' : c[74] != "-" ? c[74] : "",
+                        'exp' : calculateExpPercent(c[75]),
+                        'rank' : calculateWpnRank(c[75])
                     },
                     'wpn3' : {
-                        'class' : c[60] != "-" ? c[60] : "",
-                        'exp' : calculateExpPercent(c[61]),
-                        'rank' : calculateWpnRank(c[61])
+                        'class' : c[76] != "-" ? c[76] : "",
+                        'exp' : calculateExpPercent(c[77]),
+                        'rank' : calculateWpnRank(c[77])
                     }
                 },
-                'mimic' : c[62] != "None" ? c[62] : "",
-                'behavior' : c[63] != undefined ? c[63] : "",
-                'desc' : c[64] != undefined ? c[64] : "",
-                'portrait' : c[65] != undefined ? c[65] : ""
+                'mimic' : c[78] != "None" ? c[78] : "",
+                'behavior' : c[79] != undefined ? c[79] : "",
+                'desc' : c[80] != undefined ? c[80] : "",
+                'portrait' : c[81] != undefined ? c[81] : ""
             };
 
             //Inventory
@@ -487,16 +499,19 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             else{ char.paired = false; }
 
             //Calculate battle stats
-            if(char.equippedWeapon.atkStat == "Physical") char.Atk = Math.floor(calculateAtk(char.TrueStr, char.equippedWeapon.might));
-            else if(char.equippedWeapon.atkStat == "Magical") char.Atk = Math.floor(calculateAtk(char.TrueMag, char.equippedWeapon.might));
+            if(char.equippedWeapon.atkStat == "Physical") char.Atk = Math.floor(calculateAtk(char.TrueStr, char.equippedWeapon.might)) + char.AtkBuff + char.AtkBoost;
+            else if(char.equippedWeapon.atkStat == "Magical") char.Atk = Math.floor(calculateAtk(char.TrueMag, char.equippedWeapon.might)) + char.AtkBuff + char.AtkBoost;
             else char.Atk = 0;
 
-            char.Hit = Math.floor(calculateHit(char.TrueSkl, char.equippedWeapon.hit));
-            char.Crit = Math.floor(calculateCrit(char.TrueSkl));
+            char.Hit = Math.floor(calculateHit(char.TrueSkl, char.equippedWeapon.hit)) + char.HitBuff + char.HitBoost;
+            char.Crit = Math.floor(calculateCrit(char.TrueSkl)) + char.CritBuff + char.CritBoost;
             if(char.position.indexOf(",") != -1 && char.class.terrainType != "Flier") 
-                char.Avo = Math.floor(calculateAvo(char.TrueSpd,  terrainIndex[terrainLocs[char.position].type].avo));
-            else char.Avo = Math.floor(calculateAvo(char.TrueSpd, 0));
+                char.Avo = Math.floor(calculateAvo(char.TrueSpd,  terrainIndex[terrainLocs[char.position].type].avo)) + char.AvoBuff + char.AvoBoost;
+            else char.Avo = Math.floor(calculateAvo(char.TrueSpd, 0)) + char.AvoBuff + char.AvoBoost;
             
+            char.Grd = char.GrdBuff + char.GrdBoost;
+            char.Eva = Math.floor(calculateEva(char.TrueSpd)) + char.EvaBuff + char.EvaBoost;
+
             if (terrainLocs[characters[c].position] != undefined)
                 terrainLocs[characters[c].position].occupiedAffiliation = characters[c].affiliation;
         }
@@ -899,6 +914,10 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 
     function calculateAvo(spd, terrainBonus){
         return (spd * 2.5) + terrainBonus;
+    };
+
+    function calculateEva(spd){
+        return (spd * 2.5);
     };
 
     function calculateExpPercent(exp){
