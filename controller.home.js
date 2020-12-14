@@ -407,7 +407,8 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 			case "Alistair's Army" : return NAMETAG_BLUE;
 			case "Crown Army" : 
 			case "Bandits" : 
-			case "Lost Heroes" : return NAMETAG_RED;
+			case "Lost Heroes" : 
+			case "The Resin Dead": return NAMETAG_RED;
 			case "Villagers" : return NAMETAG_GREEN2;
 			case "Allies" : return NAMETAG_GREEN;
 			case "Other" : return NAMETAG_PERIWINKLE;
