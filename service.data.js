@@ -293,6 +293,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
                 'class': getClass(c[2]),
                 'motif' : getMotif(c[3]),
                 'affiliation' : c[4],
+                'affiliationGroup' : getAffiliationGrouping(c[4]),
                 'position' : c[5],
                 'hasMoved' : c[6] == "1",
                 'currHp' : parseInt(c[7]) | 0,
@@ -513,7 +514,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             char.Eva = Math.floor(calculateEva(char.TrueSpd)) + char.EvaBuff + char.EvaBoost;
 
             if (terrainLocs[characters[c].position] != undefined)
-                terrainLocs[characters[c].position].occupiedAffiliation = characters[c].affiliation;
+                terrainLocs[characters[c].position].occupiedAffiliation = characters[c].affiliationGroup;
         }
 
         updateProgressBar();
@@ -596,7 +597,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
 					'atkRange' : maxAtkRange,
 					'healRange' : maxHealRange,
 					'terrainClass' : char.class.terrainType,
-                    'affiliation' : char.affiliation,
+                    'affiliation' : char.affiliationGroup,
                     'hasWaterWalker' : hasWaterWalker,
                     'hasRockClimber' : hasRockClimber,
                     'hasHover' : hasHover
@@ -887,7 +888,23 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             'spriteUrl' : "", 
         }
     };
-
+	
+    function getAffiliationGrouping(aff){
+        switch(aff){
+			case "Alistair's Army" : return 1;
+			case "Crown Army" : 
+			case "Bandits" : 
+			case "Lost Heroes" : 
+			case "The Resin Dead": 
+            case "Fallen Heroes":
+            case "Inglesmight" : return 2;
+			case "Villagers" : return 3;
+			case "Allies" : return 4;
+			case "Other" : return 5;
+			default: return 0;
+		}
+    };
+    
     //\\//\\//\\//\\//\\//
     //   CALCULATIONS   //
     //\\//\\//\\//\\//\\//
