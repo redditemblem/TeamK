@@ -61,6 +61,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 		$scope.rows = DataService.getRows();
 		$scope.columns = DataService.getColumns();
 		$scope.terrainTypes = DataService.getTerrainTypes();
+		$scope.terrainEffects = DataService.getTerrainEffects();
 		$scope.terrainLocs = DataService.getTerrainMappings();
 	}
 
@@ -81,6 +82,7 @@ app.controller('HomeCtrl', ['$scope', '$location', '$interval', 'DataService', f
 				$scope.rows = DataService.getRows();
 				$scope.columns = DataService.getColumns();
 				$scope.terrainTypes = DataService.getTerrainTypes();
+				$scope.terrainEffects = DataService.getTerrainEffects();
 				$scope.terrainLocs = DataService.getTerrainMappings();
 				$scope.$apply();
 			}
