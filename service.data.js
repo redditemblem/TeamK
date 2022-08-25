@@ -2,7 +2,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     const chapterSheetID = '1fwzq_64mPMmCndomAe7sZeBrhJEhR9S-CJvIitzVrDI';
     const gaidenSheetID = '1k-AdHWJMDHDqWinboBNtB11ss5A4xihryIAyP5TUhgg';
     var sheetId = '';
-    const updateVal = (100 / 14) + 0.1;
+    const updateVal = (100 / 16) + 0.1;
     const boxWidth = 16;
     const gridWidth = 0;
     var progress = 0;
@@ -11,13 +11,14 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     var enemies = null;
     var rows = [];
     var cols = [];
-    var map, characterData, classIndex, itemIndex, skillIndex, motifIndex, familiarIndex, statusIndex, coordMapping, terrainIndex, terrainLocs;
+    var map, characterData, classIndex, itemIndex, skillIndex, motifIndex, familiarIndex, statusIndex, coordMapping, effectsMapping, terrainIndex, effectsIndex, terrainLocs;
 
     this.getCharacters = function() { return characters; };
     this.getMap = function() { return map; };
     this.getRows = function() { return rows; };
     this.getColumns = function() { return cols; };
     this.getTerrainTypes = function() { return terrainIndex; };
+    this.getTerrainEffects = function(){ return effectsIndex; };
     this.getTerrainMappings = function() { return terrainLocs; };
 
     this.loadMapData = function() { fetchCharacterData(); };
@@ -263,6 +264,29 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             }
 
             updateProgressBar();
+            fetchEffectsIndex();
+        });
+    };
+
+    function fetchEffectsIndex(){
+        gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: sheetId,
+            majorDimension: "ROWS",
+            range: 'Effect Chart!A2:B',
+        }).then(function(response) {
+            var rows = response.result.values;
+            effectsIndex = {};
+
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                if (r.length == 0 || r[0].length == 0 || r[1] == undefined || r[1].length == 0) continue;
+
+                effectsIndex[r[0]] = {
+                    'spriteURL' : r[1]
+                }
+            }
+
+            updateProgressBar();
             fetchTerrainChart();
         });
     };
@@ -275,6 +299,20 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         }).then(function(response) {
             coordMapping = response.result.values;
 
+            updateProgressBar();
+            fetchEffectsChart();
+        });
+    };
+
+    function fetchEffectsChart(){
+        gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: sheetId,
+            majorDimension: 'ROWS',
+            range: 'Effect Locations!A1:ZZ',
+        }).then(function(response) {
+            effectsMapping = response.result.values;
+            if(effectsMapping == undefined) effectsMapping = [];
+            
             updateProgressBar();
             processCharacters();
         });
@@ -470,6 +508,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
         for (var r = 0; r < rows.length; r++)
             for (var c = 0; c < cols.length; c++)
                 terrainLocs[cols[c] + "," + rows[r]] = getDefaultTerrainObj();
+                
         terrainLocs["-1,-1"] = getDefaultTerrainObj();
         terrainLocs["Defeated"] = getDefaultTerrainObj();
         terrainLocs["Not Deployed"] = getDefaultTerrainObj();
@@ -479,6 +518,14 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             var row = coordMapping[r];
             for (var c = 0; c < cols.length && c < row.length; c++) {
                 if (row[c].length > 0) terrainLocs[cols[c] + "," + rows[r]].type = row[c];
+            }
+        }
+
+        //Update terrain effects from input list
+        for(var r = 0; r < effectsMapping.length; r++) {
+            var row = effectsMapping[r];
+            for (var c = 0; c < cols.length && c < row.length; c++) {
+                if (row[c].length > 0) terrainLocs[cols[c] + "," + rows[r]].terrainEffect = row[c];
             }
         }
 
@@ -534,7 +581,8 @@ app.service('DataService', ['$rootScope', function($rootScope) {
             'movCount': 0,
             'atkCount': 0,
             'healCount': 0,
-            'occupiedAffiliation': ''
+            'occupiedAffiliation': '',
+            'terrainEffect': ''
         }
     };
 
