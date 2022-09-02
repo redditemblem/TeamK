@@ -41,7 +41,7 @@
 			 title="({{column}},{{row}}) {{terrainLocs[column+','+row].type}}: {{terrainTypes[terrainLocs[column+','+row].type].avo}}🚶  {{terrainTypes[terrainLocs[column+','+row].type].def}}⛨  {{terrainTypes[terrainLocs[column+','+row].type].heal + terrainLocs[column+','+row].bonusHealVal}}♥"
 			 ng-style="{left: determineGlowX(indexX)}"
 		>
-			 <img ng-if="terrainLocs[column+','+row].terrainEffect.length > 0" ng-src="{{terrainEffects[terrainLocs[column+','+row].terrainEffect]}}" />
+			 <img ng-if="terrainLocs[column+','+row].terrainEffect.length > 0" ng-src="{{terrainEffects[terrainLocs[column+','+row].terrainEffect].spriteURL}}" />
 			 <div style="width: 100%; height: 100%;" ng-style="{'background-color': determineGlowColor(column+','+row)}"></div>
 			 <div class="glowBoxBorderBox" ng-class="{glowBoxBorder3:showGrid==3, glowBoxBorder2:showGrid==2, glowBoxBorder1:showGrid==1}"></div>
 		</div>

@@ -2,7 +2,7 @@ app.service('DataService', ['$rootScope', function($rootScope) {
     const chapterSheetID = '1fwzq_64mPMmCndomAe7sZeBrhJEhR9S-CJvIitzVrDI';
     const gaidenSheetID = '1k-AdHWJMDHDqWinboBNtB11ss5A4xihryIAyP5TUhgg';
     var sheetId = '';
-    const updateVal = (100 / 16) + 0.1;
+    const updateVal = (100 / 16) + 0.01;
     const boxWidth = 16;
     const gridWidth = 0;
     var progress = 0;
